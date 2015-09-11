@@ -12,8 +12,10 @@ import SwiftyJSON
 
 class GitHubAPIManager {
   static let sharedInstance = GitHubAPIManager()
-  
   var alamofireManager:Alamofire.Manager
+  
+  var clientID: String = "1234567890"
+  var clientSecret: String = "abcdefghijkl"
   
   init () {
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -75,7 +77,10 @@ class GitHubAPIManager {
   // MARK: - OAuth flow
   
   func startOAuth2Login() {
-    // TODO: implement
+    let authPath:String = "https://github.com/login/oauth/authorize?client_id=\(clientID)&scope=gist&state=TEST_STATE"
+    if let authURL:NSURL = NSURL(string: authPath) {
+      UIApplication.sharedApplication().openURL(authURL)
+    }
     // TODO: get and print starred gists
   }
   

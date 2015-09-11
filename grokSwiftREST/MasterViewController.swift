@@ -47,11 +47,16 @@ class MasterViewController: UITableViewController {
   
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
-    loadGists(nil)
     
-    // TEST
-    GitHubAPIManager.sharedInstance.printMyStarredGistsWithBasicAuth()
-    // END TEST
+    loadInitialData()
+  }
+  
+  func loadInitialData() {
+    if (!GitHubAPIManager.sharedInstance.hasOAuthToken()) {
+      showOAuthLoginView()
+    } else {
+      GitHubAPIManager.sharedInstance.printMyStarredGistsWithOAuth2()
+    }
   }
   
   func loadGists(urlToLoad: String?) {
@@ -84,6 +89,13 @@ class MasterViewController: UITableViewController {
       self.refreshControl?.attributedTitle = NSAttributedString(string: updateString)
       
       self.tableView.reloadData()
+    }
+  }
+  
+  func showOAuthLoginView() {
+    let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+    if let loginVC = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController {
+      self.presentViewController(loginVC, animated: true, completion: nil)
     }
   }
   

@@ -63,6 +63,28 @@ class GitHubAPIManager {
         if let receivedString = result.value {
           print(receivedString)
         }
+      }
+  }
+  
+  // MARK: - OAuth 2.0
+  func hasOAuthToken() -> Bool {
+    // TODO: implement
+    return false
+  }
+  
+  // MARK: - OAuth flow
+  
+  func startOAuth2Login() {
+    // TODO: implement
+    // TODO: get and print starred gists
+  }
+  
+  func printMyStarredGistsWithOAuth2() -> Void {
+    Alamofire.request(.GET, "https://api.github.com/gists/starred")
+      .responseString { _, _, result in
+        if let receivedString = result.value {
+          print(receivedString)
+        }
     }
   }
   

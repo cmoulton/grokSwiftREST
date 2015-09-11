@@ -8,13 +8,12 @@
 
 import UIKit
 import Alamofire
+import PINRemoteImage
 
 class MasterViewController: UITableViewController {
   
   var detailViewController: DetailViewController? = nil
   var gists = [Gist]()
-  
-  var imageCache: Dictionary<String, UIImage?> = Dictionary<String, UIImage?>()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -95,26 +94,13 @@ class MasterViewController: UITableViewController {
     let gist = gists[indexPath.row]
     cell.textLabel!.text = gist.description
     cell.detailTextLabel!.text = gist.ownerLogin
+    cell.imageView?.image = nil
+    
     // set cell.imageView to display image at gist.ownerAvatarURL
-    if let urlString = gist.ownerAvatarURL {
-      if let cachedImage = imageCache[urlString] {
-        cell.imageView?.image = cachedImage // will work fine even if image is nil
-      } else {
-        GitHubAPIManager.sharedInstance.imageFromURLString(urlString, completionHandler: {
-          (image, error) in
-          if let anError = error {
-            print(anError)
-          }
-          // Save the image so we won't have to keep fetching it if they scroll
-          self.imageCache[urlString] = image
-          if let cellToUpdate = self.tableView?.cellForRowAtIndexPath(indexPath) {
-            cellToUpdate.imageView?.image = image // will work fine even if image is nil
-            cellToUpdate.setNeedsLayout() // need to reload the view, which won't happen otherwise since this is in an async call
-          }
-        })
-      }
+    if let urlString = gist.ownerAvatarURL, url = NSURL(string: urlString) {
+      cell.imageView?.pin_setImageFromURL(url, placeholderImage: UIImage(named: "placeholder.png"))
     } else {
-      cell.imageView?.image = nil
+      cell.imageView?.image = UIImage(named: "placeholder.png")
     }
     
     return cell

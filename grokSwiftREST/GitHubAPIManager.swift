@@ -50,7 +50,15 @@ class GitHubAPIManager {
   
   // MARK: - Basic Auth
   func printMyStarredGistsWithBasicAuth() -> Void {
-    Alamofire.request(.GET, "https://api.github.com/gists/starred")
+    let username = "myUsername"
+    let password = "myPassword"
+    
+    let credentialData = "\(username):\(password)".dataUsingEncoding(NSUTF8StringEncoding)!
+    let base64Credentials = credentialData.base64EncodedStringWithOptions([])
+    
+    let headers = ["Authorization": "Basic \(base64Credentials)"]
+    
+    Alamofire.request(.GET, "https://api.github.com/gists/starred", headers: headers)
       .responseString { _, _, result in
         if let receivedString = result.value {
           print(receivedString)

@@ -19,6 +19,7 @@
 		CFE6B6D51BA34BAA002A9C08 /* GitHubAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6D41BA34BAA002A9C08 /* GitHubAPIManager.swift */; settings = {ASSET_TAGS = (); }; };
 		CFE6B6D71BA34CB2002A9C08 /* Gist.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6D61BA34CB2002A9C08 /* Gist.swift */; settings = {ASSET_TAGS = (); }; };
 		CFE6B6D91BA35081002A9C08 /* ResponseJSONObjectSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6D81BA35081002A9C08 /* ResponseJSONObjectSerializable.swift */; settings = {ASSET_TAGS = (); }; };
+		CFE6B6DB1BA350BA002A9C08 /* AlamofireRequest+JSONSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6DA1BA350BA002A9C08 /* AlamofireRequest+JSONSerializable.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		CFE6B6D41BA34BAA002A9C08 /* GitHubAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubAPIManager.swift; sourceTree = "<group>"; };
 		CFE6B6D61BA34CB2002A9C08 /* Gist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gist.swift; sourceTree = "<group>"; };
 		CFE6B6D81BA35081002A9C08 /* ResponseJSONObjectSerializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseJSONObjectSerializable.swift; sourceTree = "<group>"; };
+		CFE6B6DA1BA350BA002A9C08 /* AlamofireRequest+JSONSerializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlamofireRequest+JSONSerializable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 				CFE6B6A81BA34776002A9C08 /* DetailViewController.swift */,
 				CFE6B6D41BA34BAA002A9C08 /* GitHubAPIManager.swift */,
 				CFE6B6D61BA34CB2002A9C08 /* Gist.swift */,
+				CFE6B6DA1BA350BA002A9C08 /* AlamofireRequest+JSONSerializable.swift */,
 				CFE6B6D81BA35081002A9C08 /* ResponseJSONObjectSerializable.swift */,
 				CFE6B6AA1BA34776002A9C08 /* Main.storyboard */,
 				CFE6B6AD1BA34776002A9C08 /* Assets.xcassets */,
@@ -346,6 +349,7 @@
 				CFE6B6A91BA34776002A9C08 /* DetailViewController.swift in Sources */,
 				CFE6B6D91BA35081002A9C08 /* ResponseJSONObjectSerializable.swift in Sources */,
 				CFE6B6D51BA34BAA002A9C08 /* GitHubAPIManager.swift in Sources */,
+				CFE6B6DB1BA350BA002A9C08 /* AlamofireRequest+JSONSerializable.swift in Sources */,
 				CFE6B6A71BA34776002A9C08 /* MasterViewController.swift in Sources */,
 				CFE6B6A51BA34776002A9C08 /* AppDelegate.swift in Sources */,
 			);

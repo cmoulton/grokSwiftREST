@@ -17,6 +17,8 @@ class GitHubAPIManager {
   var clientID: String = "1234567890"
   var clientSecret: String = "abcdefghijkl"
   
+  var OAuthToken: String?
+  
   init () {
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
     configuration.HTTPAdditionalHeaders = Manager.defaultHTTPHeaders
@@ -65,7 +67,7 @@ class GitHubAPIManager {
         if let receivedString = result.value {
           print(receivedString)
         }
-      }
+    }
   }
   
   // MARK: - OAuth 2.0
@@ -84,9 +86,56 @@ class GitHubAPIManager {
     // TODO: get and print starred gists
   }
   
-  func processOAuthStep1Response(url: NSURL)
-  {
-    // TODO: implement
+  func processOAuthStep1Response(url: NSURL) {
+    let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+    var code:String?
+    if let queryItems = components?.queryItems {
+      for queryItem in queryItems {
+        if (queryItem.name.lowercaseString == "code") {
+          code = queryItem.value
+          break
+        }
+      }
+    }
+    if let receivedCode = code {
+      swapAuthCodeForToken(receivedCode)
+      
+    }
+  }
+  
+  func swapAuthCodeForToken(receivedCode: String) {
+    let getTokenPath:String = "https://github.com/login/oauth/access_token"
+    let tokenParams = ["client_id": clientID, "client_secret": clientSecret, "code": receivedCode]
+    let jsonHeader = ["Accept": "application/json"]
+    Alamofire.request(.POST, getTokenPath, parameters: tokenParams, headers: jsonHeader)
+      .responseString { (request, response, result) in
+        if let anError = result.error {
+          print(anError)
+          return
+        }
+        print(result.value)
+        if let receivedResults = result.value, jsonData = receivedResults.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+          let jsonResults = JSON(data: jsonData)
+          for (key, value) in jsonResults {
+            switch key {
+            case "access_token":
+              self.OAuthToken = value.string
+            case "scope":
+              // TODO: verify scope
+              print("SET SCOPE")
+            case "token_type":
+              // TODO: verify is bearer
+              print("CHECK IF BEARER")
+            default:
+              print("got more than I expected from the OAuth token exchange")
+              print(key)
+            }
+          }
+        }
+        if (self.hasOAuthToken()) {
+          self.printMyStarredGistsWithOAuth2()
+        }
+    }
   }
   
   // MARK: - OAuth calls
@@ -135,7 +184,7 @@ class GitHubAPIManager {
       getGists("https://api.github.com/gists/public", completionHandler: completionHandler)
     }
   }
-
+  
   // MARK: - Images
   func imageFromURLString(imageURLString: String, completionHandler: (UIImage?, NSError?) -> Void) {
     alamofireManager.request(.GET, imageURLString)

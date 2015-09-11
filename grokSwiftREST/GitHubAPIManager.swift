@@ -84,6 +84,13 @@ class GitHubAPIManager {
     // TODO: get and print starred gists
   }
   
+  func processOAuthStep1Response(url: NSURL)
+  {
+    // TODO: implement
+  }
+  
+  // MARK: - OAuth calls
+  
   func printMyStarredGistsWithOAuth2() -> Void {
     Alamofire.request(.GET, "https://api.github.com/gists/starred")
       .responseString { _, _, result in

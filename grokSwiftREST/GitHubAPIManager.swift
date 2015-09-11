@@ -58,12 +58,30 @@ class GitHubAPIManager {
     }
   }
   
-  func getPublicGists(completionHandler: (Result<[Gist]>) -> Void) {
-    let publicGistsRequest = alamofireManager.request(.GET, "https://api.github.com/gists/public")
+  func getGists(urlString: String, completionHandler: (Result<[Gist]>, String?) -> Void) {
+    alamofireManager.request(.GET, urlString)
+      .validate()
       .responseArray { (request, response, result: Result<[Gist]>) in
-        completionHandler(result)
+        guard result.error == nil,
+          let gists = result.value else {
+            print(result.error)
+            completionHandler(result, nil)
+            return
+        }
+        
+        // need to figure out if this is the last page
+        // check the link header, if present
+        let next = self.getNextPageFromHeaders(response)
+        completionHandler(.Success(gists), next)
     }
-    debugPrint(publicGistsRequest)
+  }
+  
+  func getPublicGists(pageToLoad: String?, completionHandler: (Result<[Gist]>, String?) -> Void) {
+    if let urlString = pageToLoad {
+      getGists(urlString, completionHandler: completionHandler)
+    } else {
+      getGists("https://api.github.com/gists/public", completionHandler: completionHandler)
+    }
   }
 
   // MARK: - Images
@@ -78,5 +96,34 @@ class GitHubAPIManager {
         let image = UIImage(data: data! as NSData)
         completionHandler(image, nil)
     }
+  }
+  
+  // MARK: - Pagination
+  private func getNextPageFromHeaders(response: NSHTTPURLResponse?) -> String? {
+    if let linkHeader = response?.allHeaderFields["Link"] as? String {
+      /* looks like:
+      <https://api.github.com/user/20267/gists?page=2>; rel="next", <https://api.github.com/user/20267/gists?page=6>; rel="last"
+      */
+      // so split on "," the  on  ";"
+      let components = linkHeader.characters.split {$0 == ","}.map { String($0) }
+      // now we have 2 lines like '<https://api.github.com/user/20267/gists?page=2>; rel="next"'
+      // So let's get the URL out of there:
+      for item in components {
+        // see if it's "next"
+        let rangeOfNext = item.rangeOfString("rel=\"next\"", options: [])
+        if rangeOfNext != nil {
+          let rangeOfPaddedURL = item.rangeOfString("<(.*)>;", options: .RegularExpressionSearch)
+          if let range = rangeOfPaddedURL {
+            let nextURL = item.substringWithRange(range)
+            // strip off the < and >;
+            let startIndex = nextURL.startIndex.advancedBy(1) //advance as much as you like
+            let endIndex = nextURL.endIndex.advancedBy(-2)
+            let urlRange = startIndex..<endIndex
+            return nextURL.substringWithRange(urlRange)
+          }
+        }
+      }
+    }
+    return nil
   }
 }

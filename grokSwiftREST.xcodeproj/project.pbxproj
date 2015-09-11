@@ -1,0 +1,510 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CFE6B6A51BA34776002A9C08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */; };
+		CFE6B6A71BA34776002A9C08 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */; };
+		CFE6B6A91BA34776002A9C08 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A81BA34776002A9C08 /* DetailViewController.swift */; };
+		CFE6B6AC1BA34776002A9C08 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CFE6B6AA1BA34776002A9C08 /* Main.storyboard */; };
+		CFE6B6AE1BA34776002A9C08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFE6B6AD1BA34776002A9C08 /* Assets.xcassets */; };
+		CFE6B6B11BA34776002A9C08 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CFE6B6AF1BA34776002A9C08 /* LaunchScreen.storyboard */; };
+		CFE6B6BC1BA34776002A9C08 /* grokSwiftRESTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6BB1BA34776002A9C08 /* grokSwiftRESTTests.swift */; };
+		CFE6B6C71BA34776002A9C08 /* grokSwiftRESTUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6C61BA34776002A9C08 /* grokSwiftRESTUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CFE6B6B81BA34776002A9C08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CFE6B6991BA34776002A9C08 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CFE6B6A01BA34776002A9C08;
+			remoteInfo = grokSwiftREST;
+		};
+		CFE6B6C31BA34776002A9C08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CFE6B6991BA34776002A9C08 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CFE6B6A01BA34776002A9C08;
+			remoteInfo = grokSwiftREST;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CFE6B6A11BA34776002A9C08 /* grokSwiftREST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = grokSwiftREST.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		CFE6B6A81BA34776002A9C08 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		CFE6B6AB1BA34776002A9C08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		CFE6B6AD1BA34776002A9C08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CFE6B6B01BA34776002A9C08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CFE6B6B21BA34776002A9C08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CFE6B6B71BA34776002A9C08 /* grokSwiftRESTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = grokSwiftRESTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFE6B6BB1BA34776002A9C08 /* grokSwiftRESTTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = grokSwiftRESTTests.swift; sourceTree = "<group>"; };
+		CFE6B6BD1BA34776002A9C08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CFE6B6C21BA34776002A9C08 /* grokSwiftRESTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = grokSwiftRESTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFE6B6C61BA34776002A9C08 /* grokSwiftRESTUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = grokSwiftRESTUITests.swift; sourceTree = "<group>"; };
+		CFE6B6C81BA34777002A9C08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CFE6B69E1BA34776002A9C08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CFE6B6B41BA34776002A9C08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CFE6B6BF1BA34776002A9C08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CFE6B6981BA34776002A9C08 = {
+			isa = PBXGroup;
+			children = (
+				CFE6B6A31BA34776002A9C08 /* grokSwiftREST */,
+				CFE6B6BA1BA34776002A9C08 /* grokSwiftRESTTests */,
+				CFE6B6C51BA34776002A9C08 /* grokSwiftRESTUITests */,
+				CFE6B6A21BA34776002A9C08 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CFE6B6A21BA34776002A9C08 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CFE6B6A11BA34776002A9C08 /* grokSwiftREST.app */,
+				CFE6B6B71BA34776002A9C08 /* grokSwiftRESTTests.xctest */,
+				CFE6B6C21BA34776002A9C08 /* grokSwiftRESTUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CFE6B6A31BA34776002A9C08 /* grokSwiftREST */ = {
+			isa = PBXGroup;
+			children = (
+				CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */,
+				CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */,
+				CFE6B6A81BA34776002A9C08 /* DetailViewController.swift */,
+				CFE6B6AA1BA34776002A9C08 /* Main.storyboard */,
+				CFE6B6AD1BA34776002A9C08 /* Assets.xcassets */,
+				CFE6B6AF1BA34776002A9C08 /* LaunchScreen.storyboard */,
+				CFE6B6B21BA34776002A9C08 /* Info.plist */,
+			);
+			path = grokSwiftREST;
+			sourceTree = "<group>";
+		};
+		CFE6B6BA1BA34776002A9C08 /* grokSwiftRESTTests */ = {
+			isa = PBXGroup;
+			children = (
+				CFE6B6BB1BA34776002A9C08 /* grokSwiftRESTTests.swift */,
+				CFE6B6BD1BA34776002A9C08 /* Info.plist */,
+			);
+			path = grokSwiftRESTTests;
+			sourceTree = "<group>";
+		};
+		CFE6B6C51BA34776002A9C08 /* grokSwiftRESTUITests */ = {
+			isa = PBXGroup;
+			children = (
+				CFE6B6C61BA34776002A9C08 /* grokSwiftRESTUITests.swift */,
+				CFE6B6C81BA34777002A9C08 /* Info.plist */,
+			);
+			path = grokSwiftRESTUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CFE6B6A01BA34776002A9C08 /* grokSwiftREST */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CFE6B6CB1BA34777002A9C08 /* Build configuration list for PBXNativeTarget "grokSwiftREST" */;
+			buildPhases = (
+				CFE6B69D1BA34776002A9C08 /* Sources */,
+				CFE6B69E1BA34776002A9C08 /* Frameworks */,
+				CFE6B69F1BA34776002A9C08 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = grokSwiftREST;
+			productName = grokSwiftREST;
+			productReference = CFE6B6A11BA34776002A9C08 /* grokSwiftREST.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CFE6B6B61BA34776002A9C08 /* grokSwiftRESTTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CFE6B6CE1BA34777002A9C08 /* Build configuration list for PBXNativeTarget "grokSwiftRESTTests" */;
+			buildPhases = (
+				CFE6B6B31BA34776002A9C08 /* Sources */,
+				CFE6B6B41BA34776002A9C08 /* Frameworks */,
+				CFE6B6B51BA34776002A9C08 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CFE6B6B91BA34776002A9C08 /* PBXTargetDependency */,
+			);
+			name = grokSwiftRESTTests;
+			productName = grokSwiftRESTTests;
+			productReference = CFE6B6B71BA34776002A9C08 /* grokSwiftRESTTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CFE6B6C11BA34776002A9C08 /* grokSwiftRESTUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CFE6B6D11BA34777002A9C08 /* Build configuration list for PBXNativeTarget "grokSwiftRESTUITests" */;
+			buildPhases = (
+				CFE6B6BE1BA34776002A9C08 /* Sources */,
+				CFE6B6BF1BA34776002A9C08 /* Frameworks */,
+				CFE6B6C01BA34776002A9C08 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CFE6B6C41BA34776002A9C08 /* PBXTargetDependency */,
+			);
+			name = grokSwiftRESTUITests;
+			productName = grokSwiftRESTUITests;
+			productReference = CFE6B6C21BA34776002A9C08 /* grokSwiftRESTUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CFE6B6991BA34776002A9C08 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Teak Mobile Inc";
+				TargetAttributes = {
+					CFE6B6A01BA34776002A9C08 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					CFE6B6B61BA34776002A9C08 = {
+						CreatedOnToolsVersion = 7.0;
+						TestTargetID = CFE6B6A01BA34776002A9C08;
+					};
+					CFE6B6C11BA34776002A9C08 = {
+						CreatedOnToolsVersion = 7.0;
+						TestTargetID = CFE6B6A01BA34776002A9C08;
+					};
+				};
+			};
+			buildConfigurationList = CFE6B69C1BA34776002A9C08 /* Build configuration list for PBXProject "grokSwiftREST" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CFE6B6981BA34776002A9C08;
+			productRefGroup = CFE6B6A21BA34776002A9C08 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CFE6B6A01BA34776002A9C08 /* grokSwiftREST */,
+				CFE6B6B61BA34776002A9C08 /* grokSwiftRESTTests */,
+				CFE6B6C11BA34776002A9C08 /* grokSwiftRESTUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CFE6B69F1BA34776002A9C08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CFE6B6B11BA34776002A9C08 /* LaunchScreen.storyboard in Resources */,
+				CFE6B6AE1BA34776002A9C08 /* Assets.xcassets in Resources */,
+				CFE6B6AC1BA34776002A9C08 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CFE6B6B51BA34776002A9C08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CFE6B6C01BA34776002A9C08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CFE6B69D1BA34776002A9C08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CFE6B6A91BA34776002A9C08 /* DetailViewController.swift in Sources */,
+				CFE6B6A71BA34776002A9C08 /* MasterViewController.swift in Sources */,
+				CFE6B6A51BA34776002A9C08 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CFE6B6B31BA34776002A9C08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CFE6B6BC1BA34776002A9C08 /* grokSwiftRESTTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CFE6B6BE1BA34776002A9C08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CFE6B6C71BA34776002A9C08 /* grokSwiftRESTUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CFE6B6B91BA34776002A9C08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CFE6B6A01BA34776002A9C08 /* grokSwiftREST */;
+			targetProxy = CFE6B6B81BA34776002A9C08 /* PBXContainerItemProxy */;
+		};
+		CFE6B6C41BA34776002A9C08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CFE6B6A01BA34776002A9C08 /* grokSwiftREST */;
+			targetProxy = CFE6B6C31BA34776002A9C08 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CFE6B6AA1BA34776002A9C08 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CFE6B6AB1BA34776002A9C08 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		CFE6B6AF1BA34776002A9C08 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CFE6B6B01BA34776002A9C08 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CFE6B6C91BA34777002A9C08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CFE6B6CA1BA34777002A9C08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CFE6B6CC1BA34777002A9C08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = grokSwiftREST/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.teakmobile.grokswift.grokSwiftREST;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CFE6B6CD1BA34777002A9C08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = grokSwiftREST/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.teakmobile.grokswift.grokSwiftREST;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		CFE6B6CF1BA34777002A9C08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = grokSwiftRESTTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.teakmobile.grokswift.grokSwiftRESTTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/grokSwiftREST.app/grokSwiftREST";
+			};
+			name = Debug;
+		};
+		CFE6B6D01BA34777002A9C08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = grokSwiftRESTTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.teakmobile.grokswift.grokSwiftRESTTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/grokSwiftREST.app/grokSwiftREST";
+			};
+			name = Release;
+		};
+		CFE6B6D21BA34777002A9C08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = grokSwiftRESTUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.teakmobile.grokswift.grokSwiftRESTUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = grokSwiftREST;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		CFE6B6D31BA34777002A9C08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = grokSwiftRESTUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.teakmobile.grokswift.grokSwiftRESTUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = grokSwiftREST;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CFE6B69C1BA34776002A9C08 /* Build configuration list for PBXProject "grokSwiftREST" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CFE6B6C91BA34777002A9C08 /* Debug */,
+				CFE6B6CA1BA34777002A9C08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CFE6B6CB1BA34777002A9C08 /* Build configuration list for PBXNativeTarget "grokSwiftREST" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CFE6B6CC1BA34777002A9C08 /* Debug */,
+				CFE6B6CD1BA34777002A9C08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		CFE6B6CE1BA34777002A9C08 /* Build configuration list for PBXNativeTarget "grokSwiftRESTTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CFE6B6CF1BA34777002A9C08 /* Debug */,
+				CFE6B6D01BA34777002A9C08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		CFE6B6D11BA34777002A9C08 /* Build configuration list for PBXNativeTarget "grokSwiftRESTUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CFE6B6D21BA34777002A9C08 /* Debug */,
+				CFE6B6D31BA34777002A9C08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CFE6B6991BA34776002A9C08 /* Project object */;
+}

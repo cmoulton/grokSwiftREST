@@ -32,7 +32,19 @@ class MasterViewController: UITableViewController {
   
   override func viewWillAppear(animated: Bool) {
     self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
+    
+    // add refresh control for pull to refresh
+    if (self.refreshControl == nil) {
+      self.refreshControl = UIRefreshControl()
+      self.refreshControl?.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+    }
+    
     super.viewWillAppear(animated)
+  }
+  
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    loadGists(nil)
   }
   
   func loadGists(urlToLoad: String?) {
@@ -40,10 +52,14 @@ class MasterViewController: UITableViewController {
     GitHubAPIManager.sharedInstance.getPublicGists(urlToLoad) { (result, nextPage) in
       self.isLoading = false
       self.nextPageURLString = nextPage
+      // tell refresh control it can stop showing up now
+      if self.refreshControl != nil && self.refreshControl!.refreshing {
+        self.refreshControl?.endRefreshing()
+      }
       
       guard result.error == nil else {
         print(result.error)
-        // TODO: display error
+        self.nextPageURLString = nil
         return
       }
       
@@ -53,15 +69,10 @@ class MasterViewController: UITableViewController {
         } else {
           self.gists = fetchedGists
         }
-        self.nextPageURLString = nextPage
       }
+      
       self.tableView.reloadData()
     }
-  }
-  
-  override func viewDidAppear(animated: Bool) {
-    super.viewDidAppear(animated)
-    loadGists(nil)
   }
   
   override func didReceiveMemoryWarning() {
@@ -140,4 +151,10 @@ class MasterViewController: UITableViewController {
     }
   }
   
+  // MARK: - Pull to Refresh
+  func refresh(sender:AnyObject) {
+    nextPageURLString = nil // so it doesn't try to append the results
+    loadGists(nil)
+  }
+
 }

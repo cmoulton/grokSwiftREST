@@ -59,11 +59,12 @@ class GitHubAPIManager {
   }
   
   func getPublicGists(completionHandler: (Result<[Gist]>) -> Void) {
-    alamofireManager.request(.GET, "https://api.github.com/gists/public")
-      .validate()
+    let publicGistsRequest = alamofireManager.request(.GET, "https://api.github.com/gists/public")
       .responseArray { (request, response, result: Result<[Gist]>) in
         completionHandler(result)
     }
+    debugPrint(publicGistsRequest)
   }
+
   
 }

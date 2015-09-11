@@ -11,7 +11,7 @@ import Alamofire
 import PINRemoteImage
 
 class MasterViewController: UITableViewController {
-  
+  var dateFormatter = NSDateFormatter()
   var detailViewController: DetailViewController? = nil
   var gists = [Gist]()
   var nextPageURLString: String?
@@ -32,14 +32,17 @@ class MasterViewController: UITableViewController {
   
   override func viewWillAppear(animated: Bool) {
     self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
+
+    super.viewWillAppear(animated)
     
     // add refresh control for pull to refresh
     if (self.refreshControl == nil) {
       self.refreshControl = UIRefreshControl()
+      self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
       self.refreshControl?.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+      self.dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
+      self.dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle
     }
-    
-    super.viewWillAppear(animated)
   }
   
   override func viewDidAppear(animated: Bool) {
@@ -70,6 +73,11 @@ class MasterViewController: UITableViewController {
           self.gists = fetchedGists
         }
       }
+      
+      // update "last updated" title for refresh control
+      let now = NSDate()
+      let updateString = "Last Updated at " + self.dateFormatter.stringFromDate(now)
+      self.refreshControl?.attributedTitle = NSAttributedString(string: updateString)
       
       self.tableView.reloadData()
     }

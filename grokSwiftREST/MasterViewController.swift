@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import PINRemoteImage
 
-class MasterViewController: UITableViewController {
+class MasterViewController: UITableViewController, LoginViewDelegate {
   var dateFormatter = NSDateFormatter()
   var detailViewController: DetailViewController? = nil
   var gists = [Gist]()
@@ -95,6 +95,7 @@ class MasterViewController: UITableViewController {
   func showOAuthLoginView() {
     let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
     if let loginVC = storyboard.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController {
+      loginVC.delegate = self
       self.presentViewController(loginVC, animated: true, completion: nil)
     }
   }
@@ -179,6 +180,12 @@ class MasterViewController: UITableViewController {
   func refresh(sender:AnyObject) {
     nextPageURLString = nil // so it doesn't try to append the results
     loadGists(nil)
+  }
+  
+  // MARK: - Login View Delegate
+  func didTapLoginButton() {
+    self.dismissViewControllerAnimated(false, completion: nil)
+    GitHubAPIManager.sharedInstance.startOAuth2Login()
   }
 
 }

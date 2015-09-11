@@ -8,9 +8,16 @@
 
 import UIKit
 
+protocol LoginViewDelegate: class {
+  func didTapLoginButton()
+}
+
 class LoginViewController: UIViewController {
+  weak var delegate: LoginViewDelegate?
   
   @IBAction func tappedLoginButton() {
-    // TODO: implement
+    if let delegate = self.delegate {
+      delegate.didTapLoginButton()
+    }
   }
 }

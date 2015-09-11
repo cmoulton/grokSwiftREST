@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C486DBD6014F8BA62BDB93A7 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D69B16AB3D445DF4545C9C5 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		CFE6B6A51BA34776002A9C08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */; };
 		CFE6B6A71BA34776002A9C08 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */; };
 		CFE6B6A91BA34776002A9C08 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A81BA34776002A9C08 /* DetailViewController.swift */; };
@@ -15,6 +16,7 @@
 		CFE6B6B11BA34776002A9C08 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CFE6B6AF1BA34776002A9C08 /* LaunchScreen.storyboard */; };
 		CFE6B6BC1BA34776002A9C08 /* grokSwiftRESTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6BB1BA34776002A9C08 /* grokSwiftRESTTests.swift */; };
 		CFE6B6C71BA34776002A9C08 /* grokSwiftRESTUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6C61BA34776002A9C08 /* grokSwiftRESTUITests.swift */; };
+		CFE6B6D51BA34BAA002A9C08 /* GitHubAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6D41BA34BAA002A9C08 /* GitHubAPIManager.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1D69B16AB3D445DF4545C9C5 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		575242F5DE3A241119C96727 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		8F1EEA2724E7063262E9981E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		CFE6B6A11BA34776002A9C08 /* grokSwiftREST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = grokSwiftREST.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +54,7 @@
 		CFE6B6C21BA34776002A9C08 /* grokSwiftRESTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = grokSwiftRESTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFE6B6C61BA34776002A9C08 /* grokSwiftRESTUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = grokSwiftRESTUITests.swift; sourceTree = "<group>"; };
 		CFE6B6C81BA34777002A9C08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CFE6B6D41BA34BAA002A9C08 /* GitHubAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubAPIManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C486DBD6014F8BA62BDB93A7 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +83,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		68D3EAAE01F4332D0DFB58FF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1D69B16AB3D445DF4545C9C5 /* Pods.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7030CB80A9FC9431D7F0E9E4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8F1EEA2724E7063262E9981E /* Pods.debug.xcconfig */,
+				575242F5DE3A241119C96727 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		CFE6B6981BA34776002A9C08 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +107,8 @@
 				CFE6B6BA1BA34776002A9C08 /* grokSwiftRESTTests */,
 				CFE6B6C51BA34776002A9C08 /* grokSwiftRESTUITests */,
 				CFE6B6A21BA34776002A9C08 /* Products */,
+				7030CB80A9FC9431D7F0E9E4 /* Pods */,
+				68D3EAAE01F4332D0DFB58FF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -102,6 +128,7 @@
 				CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */,
 				CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */,
 				CFE6B6A81BA34776002A9C08 /* DetailViewController.swift */,
+				CFE6B6D41BA34BAA002A9C08 /* GitHubAPIManager.swift */,
 				CFE6B6AA1BA34776002A9C08 /* Main.storyboard */,
 				CFE6B6AD1BA34776002A9C08 /* Assets.xcassets */,
 				CFE6B6AF1BA34776002A9C08 /* LaunchScreen.storyboard */,
@@ -135,9 +162,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CFE6B6CB1BA34777002A9C08 /* Build configuration list for PBXNativeTarget "grokSwiftREST" */;
 			buildPhases = (
+				F34F9DB1F15F65B800A4E085 /* Check Pods Manifest.lock */,
 				CFE6B69D1BA34776002A9C08 /* Sources */,
 				CFE6B69E1BA34776002A9C08 /* Frameworks */,
 				CFE6B69F1BA34776002A9C08 /* Resources */,
+				43A7F7811E6BCD325AF0C113 /* Embed Pods Frameworks */,
+				933EDE7C11C8E01117A79ECF /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -253,12 +283,61 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		43A7F7811E6BCD325AF0C113 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		933EDE7C11C8E01117A79ECF /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F34F9DB1F15F65B800A4E085 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		CFE6B69D1BA34776002A9C08 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				CFE6B6A91BA34776002A9C08 /* DetailViewController.swift in Sources */,
+				CFE6B6D51BA34BAA002A9C08 /* GitHubAPIManager.swift in Sources */,
 				CFE6B6A71BA34776002A9C08 /* MasterViewController.swift in Sources */,
 				CFE6B6A51BA34776002A9C08 /* AppDelegate.swift in Sources */,
 			);
@@ -400,6 +479,7 @@
 		};
 		CFE6B6CC1BA34777002A9C08 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8F1EEA2724E7063262E9981E /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = grokSwiftREST/Info.plist;
@@ -411,6 +491,7 @@
 		};
 		CFE6B6CD1BA34777002A9C08 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 575242F5DE3A241119C96727 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = grokSwiftREST/Info.plist;
@@ -487,6 +568,7 @@
 				CFE6B6CD1BA34777002A9C08 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CFE6B6CE1BA34777002A9C08 /* Build configuration list for PBXNativeTarget "grokSwiftRESTTests" */ = {
 			isa = XCConfigurationList;
@@ -495,6 +577,7 @@
 				CFE6B6D01BA34777002A9C08 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CFE6B6D11BA34777002A9C08 /* Build configuration list for PBXNativeTarget "grokSwiftRESTUITests" */ = {
 			isa = XCConfigurationList;
@@ -503,6 +586,7 @@
 				CFE6B6D31BA34777002A9C08 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

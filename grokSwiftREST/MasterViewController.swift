@@ -14,6 +14,8 @@ class MasterViewController: UITableViewController {
   var detailViewController: DetailViewController? = nil
   var gists = [Gist]()
   
+  var imageCache: Dictionary<String, UIImage?> = Dictionary<String, UIImage?>()
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
@@ -95,16 +97,22 @@ class MasterViewController: UITableViewController {
     cell.detailTextLabel!.text = gist.ownerLogin
     // set cell.imageView to display image at gist.ownerAvatarURL
     if let urlString = gist.ownerAvatarURL {
-      GitHubAPIManager.sharedInstance.imageFromURLString(urlString, completionHandler: {
-        (image, error) in
-        if let anError = error {
-          print(anError)
-        }
-        if let cellToUpdate = self.tableView?.cellForRowAtIndexPath(indexPath) {
-          cellToUpdate.imageView?.image = image // will work fine even if image is nil
-          cellToUpdate.setNeedsLayout() // need to reload the view, which won't happen otherwise since this is in an async call
-        }
-      })
+      if let cachedImage = imageCache[urlString] {
+        cell.imageView?.image = cachedImage // will work fine even if image is nil
+      } else {
+        GitHubAPIManager.sharedInstance.imageFromURLString(urlString, completionHandler: {
+          (image, error) in
+          if let anError = error {
+            print(anError)
+          }
+          // Save the image so we won't have to keep fetching it if they scroll
+          self.imageCache[urlString] = image
+          if let cellToUpdate = self.tableView?.cellForRowAtIndexPath(indexPath) {
+            cellToUpdate.imageView?.image = image // will work fine even if image is nil
+            cellToUpdate.setNeedsLayout() // need to reload the view, which won't happen otherwise since this is in an async call
+          }
+        })
+      }
     } else {
       cell.imageView?.image = nil
     }

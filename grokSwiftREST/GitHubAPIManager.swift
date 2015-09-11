@@ -49,6 +49,16 @@ class GitHubAPIManager {
   }
   
   // MARK: - Basic Auth
+  func printMyStarredGistsWithBasicAuth() -> Void {
+    Alamofire.request(.GET, "https://api.github.com/gists/starred")
+      .responseString { _, _, result in
+        if let receivedString = result.value {
+          print(receivedString)
+        }
+    }
+  }
+  
+  // MARK: - Public Gists
   func printPublicGists() -> Void {
     alamofireManager.request(.GET, "https://api.github.com/gists/public")
       .responseString { _, _, result in

@@ -351,6 +351,13 @@ class GitHubAPIManager {
     let urlString = "https://api.github.com/gists/\(gistId)/star"
     alamofireManager.request(.GET, urlString)
       .validate(statusCode: [204])
+      .isUnauthorized { _, _, result in
+        if let unauthorized = result.value where unauthorized == true {
+          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          completionHandler(nil, lostOAuthError)
+          return // don't bother with .responseArray, we didn't get any data
+        }
+      }
       .response { (request, response, data, error) in
         // 204 if starred, 404 if not
         if let anError = error as? NSError {
@@ -370,6 +377,13 @@ class GitHubAPIManager {
     //  PUT /gists/:id/star
     let urlString = "https://api.github.com/gists/\(gistId)/star"
     alamofireManager.request(.PUT, urlString)
+      .isUnauthorized { _, _, result in
+        if let unauthorized = result.value where unauthorized == true {
+          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          completionHandler(lostOAuthError)
+          return // don't bother with .responseArray, we didn't get any data
+        }
+      }
       .response { (request, response, data, error) in
         if let anError = error {
           print(anError)
@@ -383,6 +397,13 @@ class GitHubAPIManager {
     //  PUT /gists/:id/star
     let urlString = "https://api.github.com/gists/\(gistId)/star"
     alamofireManager.request(.DELETE, urlString)
+      .isUnauthorized { _, _, result in
+        if let unauthorized = result.value where unauthorized == true {
+          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          completionHandler(lostOAuthError)
+          return // don't bother with .responseArray, we didn't get any data
+        }
+      }
       .response { (request, response, data, error) in
         if let anError = error {
           print(anError)
@@ -398,6 +419,13 @@ class GitHubAPIManager {
     // DELETE /gists/:id
     let urlString = "https://api.github.com/gists/\(gistId)"
     alamofireManager.request(.DELETE, urlString)
+      .isUnauthorized { _, _, result in
+        if let unauthorized = result.value where unauthorized == true {
+          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          completionHandler(lostOAuthError)
+          return // don't bother with .responseArray, we didn't get any data
+        }
+      }
       .response { (request, response, data, error) in
         if let anError = error {
           print(anError)
@@ -429,6 +457,13 @@ class GitHubAPIManager {
     
     let urlString = "https://api.github.com/gists"
     alamofireManager.request(.POST, urlString, parameters: parameters, encoding: .JSON)
+      .isUnauthorized { _, _, result in
+        if let unauthorized = result.value where unauthorized == true {
+          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          completionHandler(nil, lostOAuthError)
+          return // don't bother with .responseArray, we didn't get any data
+        }
+      }
       .response { (request, response, data, error) in
         if let anError = error {
           print(anError)

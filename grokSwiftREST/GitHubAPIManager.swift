@@ -15,8 +15,15 @@ class GitHubAPIManager {
   static let sharedInstance = GitHubAPIManager()
   var alamofireManager:Alamofire.Manager
   
+  static let ErrorDomain = "com.error.GitHubAPIManager"
+  
   var clientID: String = "1234567890"
   var clientSecret: String = "abcdefghijkl"
+  
+  // handlers for the OAuth process
+  // stored as vars since sometimes it requires a round trip to safari which
+  // makes it hard to just keep a reference to it
+  var OAuthTokenCompletionHandler:(NSError? -> Void)?
   
   var OAuthToken: String? {
     set {
@@ -110,6 +117,11 @@ class GitHubAPIManager {
   // MARK: - OAuth flow
   
   func startOAuth2Login() {
+    var success = false
+    
+    let defaults = NSUserDefaults.standardUserDefaults()
+    defaults.setBool(true, forKey: "loadingOAuthToken")
+    
     let authPath:String = "https://github.com/login/oauth/authorize?client_id=\(clientID)&scope=gist&state=TEST_STATE"
     
     if let authURL:NSURL = NSURL(string: authPath) {
@@ -118,7 +130,15 @@ class GitHubAPIManager {
       let defaults = NSUserDefaults.standardUserDefaults()
       defaults.setBool(true, forKey: "loadingOAuthToken")
       
-      UIApplication.sharedApplication().openURL(authURL)
+      success = UIApplication.sharedApplication().openURL(authURL)
+    }
+    
+    if (!success) {
+      defaults.setBool(false, forKey: "loadingOAuthToken")
+      if let completionHandler = self.OAuthTokenCompletionHandler {
+        let error = NSError(domain: GitHubAPIManager.ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not create an OAuth authorization URL", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
+        completionHandler(error)
+      }
     }
   }
   
@@ -135,7 +155,15 @@ class GitHubAPIManager {
     }
     if let receivedCode = code {
       swapAuthCodeForToken(receivedCode)
+    } else {
+      // no code in URL that we launched with
+      let defaults = NSUserDefaults.standardUserDefaults()
+      defaults.setBool(false, forKey: "loadingOAuthToken")
       
+      if let completionHandler = self.OAuthTokenCompletionHandler {
+        let noCodeInResponseError = NSError(domain: GitHubAPIManager.ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not obtain an OAuth code", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
+        completionHandler(noCodeInResponseError)
+      }
     }
   }
   
@@ -146,7 +174,12 @@ class GitHubAPIManager {
     Alamofire.request(.POST, getTokenPath, parameters: tokenParams, headers: jsonHeader)
       .responseString { (request, response, result) in
         if let anError = result.error {
-          print(anError)
+          let defaults = NSUserDefaults.standardUserDefaults()
+          defaults.setBool(false, forKey: "loadingOAuthToken")
+          
+          if let completionHandler = self.OAuthTokenCompletionHandler {
+            completionHandler(anError as NSError)
+          }
           return
         }
         print(result.value)
@@ -172,8 +205,13 @@ class GitHubAPIManager {
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setBool(false, forKey: "loadingOAuthToken")
         
-        if (self.hasOAuthToken()) {
-          self.printMyStarredGistsWithOAuth2()
+        if let completionHandler = self.OAuthTokenCompletionHandler {
+          if (self.hasOAuthToken()) {
+            completionHandler(nil)
+          } else  {
+            let noOAuthError = NSError(domain: GitHubAPIManager.ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not obtain an OAuth token", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
+            completionHandler(noOAuthError)
+          }
         }
     }
   }
@@ -227,6 +265,22 @@ class GitHubAPIManager {
       getGists(urlString, completionHandler: completionHandler)
     } else {
       getGists("https://api.github.com/gists/public", completionHandler: completionHandler)
+    }
+  }
+  
+  func getMyStarredGists(pageToLoad: String?, completionHandler: (Result<[Gist]>, String?) -> Void) {
+    if let urlString = pageToLoad {
+      getGists(urlString, completionHandler: completionHandler)
+    } else {
+      getGists("https://api.github.com/gists/starred", completionHandler: completionHandler)
+    }
+  }
+  
+  func getMyGists(pageToLoad: String?, completionHandler: (Result<[Gist]>, String?) -> Void) {
+    if let urlString = pageToLoad {
+      getGists(urlString, completionHandler: completionHandler)
+    } else {
+      getGists("https://api.github.com/gists", completionHandler: completionHandler)
     }
   }
   

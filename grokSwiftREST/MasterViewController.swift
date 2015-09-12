@@ -55,16 +55,29 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   }
   
   func loadInitialData() {
+    isLoading = true
+    GitHubAPIManager.sharedInstance.OAuthTokenCompletionHandler = { (error) -> Void in
+      if let receivedError = error {
+        print(receivedError)
+        self.isLoading = false
+        // TODO: handle error
+        // Something went wrong, try again
+        self.showOAuthLoginView()
+      } else {
+        self.loadGists(nil)
+      }
+    }
+    
     if (!GitHubAPIManager.sharedInstance.hasOAuthToken()) {
-      showOAuthLoginView()
+      GitHubAPIManager.sharedInstance.startOAuth2Login()
     } else {
-      GitHubAPIManager.sharedInstance.printMyStarredGistsWithOAuth2()
+      loadGists(nil)
     }
   }
   
   func loadGists(urlToLoad: String?) {
     self.isLoading = true
-    GitHubAPIManager.sharedInstance.getPublicGists(urlToLoad) { (result, nextPage) in
+    GitHubAPIManager.sharedInstance.getMyStarredGists(urlToLoad) { (result, nextPage) in
       self.isLoading = false
       self.nextPageURLString = nextPage
       // tell refresh control it can stop showing up now
@@ -181,8 +194,11 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   
   // MARK: - Pull to Refresh
   func refresh(sender:AnyObject) {
+    let defaults = NSUserDefaults.standardUserDefaults()
+    defaults.setBool(false, forKey: "loadingOAuthToken")
+    
     nextPageURLString = nil // so it doesn't try to append the results
-    loadGists(nil)
+    loadInitialData()
   }
   
   // MARK: - Login View Delegate

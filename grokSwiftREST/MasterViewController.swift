@@ -17,6 +17,8 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   var nextPageURLString: String?
   var isLoading = false
   
+  @IBOutlet weak var gistSegmentedControl: UISegmentedControl!
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
@@ -76,11 +78,10 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   }
   
   func loadGists(urlToLoad: String?) {
-    self.isLoading = true
-    GitHubAPIManager.sharedInstance.getMyStarredGists(urlToLoad) { (result, nextPage) in
+    let completionHandler: (Result<[Gist]>, String?) -> Void = { (result, nextPage) in
       self.isLoading = false
       self.nextPageURLString = nextPage
-
+      
       // tell refresh control it can stop showing up now
       if self.refreshControl != nil && self.refreshControl!.refreshing {
         self.refreshControl?.endRefreshing()
@@ -113,6 +114,20 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
       self.refreshControl?.attributedTitle = NSAttributedString(string: updateString)
       
       self.tableView.reloadData()
+    }
+    
+    self.isLoading = true
+    switch gistSegmentedControl.selectedSegmentIndex {
+    case 0:
+      GitHubAPIManager.sharedInstance.getPublicGists(urlToLoad, completionHandler: completionHandler)
+    case 1:
+      // TODO: verify scope
+      GitHubAPIManager.sharedInstance.getMyStarredGists(urlToLoad, completionHandler: completionHandler)
+    case 2:
+      // TODO: verify is bearer
+      GitHubAPIManager.sharedInstance.getMyGists(urlToLoad, completionHandler: completionHandler)
+    default:
+      print("got an index that I didn't expect for gistSegmentedControl.selectedSegmentIndex")
     }
   }
   
@@ -218,5 +233,9 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
     self.dismissViewControllerAnimated(false, completion: nil)
     GitHubAPIManager.sharedInstance.startOAuth2Login()
   }
-
+  
+  // MARK: - Segmented Control
+  @IBAction func segmentedControlValueChanged(sender: UISegmentedControl) {
+    loadGists(nil)
+  }
 }

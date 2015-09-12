@@ -387,4 +387,19 @@ class GitHubAPIManager {
     }
   }
   
+  
+  // MARK: Delete and Add
+  func deleteGist(gistId: String, completionHandler: (ErrorType?) -> Void) {
+    // DELETE /gists/:id
+    let urlString = "https://api.github.com/gists/\(gistId)"
+    alamofireManager.request(.DELETE, urlString)
+      .response { (request, response, data, error) in
+        if let anError = error {
+          print(anError)
+          return
+        }
+        completionHandler(error)
+    }
+  }
+  
 }

@@ -69,4 +69,17 @@ extension Alamofire.Request {
     return response(responseSerializer: responseSerializer,
       completionHandler: completionHandler)
   }
+  
+  public func isUnauthorized(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, Result<Bool>) -> Void) -> Self {
+    let responseSerializer = GenericResponseSerializer<Bool> { request, response, data in
+      if let code = response?.statusCode {
+        return Result.Success(code == 401)
+      }
+      let error = Error.errorWithCode(.StatusCodeValidationFailed, failureReason: "No status code received")
+      return .Failure(nil, error)
+    }
+    
+    return response(responseSerializer: responseSerializer,
+      completionHandler: completionHandler)
+  }
 }

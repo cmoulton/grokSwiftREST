@@ -242,9 +242,22 @@ class GitHubAPIManager {
     }
   }
   
+  private func handleUnauthorizedResponse(urlString: String) -> NSError {
+    self.OAuthToken = nil
+    let lostOAuthError = NSError(domain: NSURLErrorDomain, code: NSURLErrorUserAuthenticationRequired, userInfo: [NSLocalizedDescriptionKey: "Not Logged In", NSLocalizedRecoverySuggestionErrorKey: "Please re-enter your GitHub credentials"])
+    return lostOAuthError
+  }
+  
   func getGists(urlString: String, completionHandler: (Result<[Gist]>, String?) -> Void) {
     alamofireManager.request(.GET, urlString)
       .validate()
+      .isUnauthorized { _, _, result in
+        if let unauthorized = result.value where unauthorized == true {
+          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          completionHandler(.Failure(nil, lostOAuthError), nil)
+          return // don't bother with .responseArray, we didn't get any data
+        }
+      }
       .responseArray { (request, response, result: Result<[Gist]>) in
         guard result.error == nil,
           let gists = result.value else {

@@ -80,6 +80,7 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
     GitHubAPIManager.sharedInstance.getMyStarredGists(urlToLoad) { (result, nextPage) in
       self.isLoading = false
       self.nextPageURLString = nextPage
+
       // tell refresh control it can stop showing up now
       if self.refreshControl != nil && self.refreshControl!.refreshing {
         self.refreshControl?.endRefreshing()
@@ -88,6 +89,13 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
       guard result.error == nil else {
         print(result.error)
         self.nextPageURLString = nil
+        
+        self.isLoading = false
+        if let error = result.error as? NSError {
+          if error.domain == NSURLErrorDomain && error.code == NSURLErrorUserAuthenticationRequired {
+            self.loadInitialData() // re-trigger oauth process
+          }
+        }
         return
       }
       
@@ -140,6 +148,7 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
       }
     }
   }
+  
   
   // MARK: - Table View
   

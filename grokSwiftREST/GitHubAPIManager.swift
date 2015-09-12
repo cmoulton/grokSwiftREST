@@ -20,6 +20,11 @@ class GitHubAPIManager {
   var clientID: String = "1234567890"
   var clientSecret: String = "abcdefghijkl"
   
+  func clearCache() {
+    let cache = NSURLCache.sharedURLCache()
+    cache.removeAllCachedResponses()
+  }
+  
   // handlers for the OAuth process
   // stored as vars since sometimes it requires a round trip to safari which
   // makes it hard to just keep a reference to it
@@ -430,8 +435,8 @@ class GitHubAPIManager {
           completionHandler(false, nil)
           return
         }
+        self.clearCache()
         completionHandler(true, nil)
     }
   }
-  
 }

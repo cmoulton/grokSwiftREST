@@ -7,3 +7,4 @@ pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git', :branc
 pod 'Alamofire', '~> 2.0'
 pod 'PINRemoteImage', '~> 1.1.2'
 pod 'Locksmith', '~> 2.0'
+pod 'XLForm', '~> 3.0'

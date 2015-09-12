@@ -339,4 +339,52 @@ class GitHubAPIManager {
     }
     return nil
   }
+  
+  // MARK: Starring / Unstarring / Star status
+  func isGistStarred(gistId: String, completionHandler: (Bool?, NSError?) -> Void) {
+    // GET /gists/:id/star
+    let urlString = "https://api.github.com/gists/\(gistId)/star"
+    alamofireManager.request(.GET, urlString)
+      .validate(statusCode: [204])
+      .response { (request, response, data, error) in
+        // 204 if starred, 404 if not
+        if let anError = error as? NSError {
+          print(anError)
+          if response?.statusCode == 404 {
+            completionHandler(false, nil)
+            return
+          }
+          completionHandler(nil, anError)
+          return
+        }
+        completionHandler(true, nil)
+    }
+  }
+  
+  func starGist(gistId: String, completionHandler: (ErrorType?) -> Void) {
+    //  PUT /gists/:id/star
+    let urlString = "https://api.github.com/gists/\(gistId)/star"
+    alamofireManager.request(.PUT, urlString)
+      .response { (request, response, data, error) in
+        if let anError = error {
+          print(anError)
+          return
+        }
+        completionHandler(error)
+    }
+  }
+  
+  func unstarGist(gistId: String, completionHandler: (ErrorType?) -> Void) {
+    //  PUT /gists/:id/star
+    let urlString = "https://api.github.com/gists/\(gistId)/star"
+    alamofireManager.request(.DELETE, urlString)
+      .response { (request, response, data, error) in
+        if let anError = error {
+          print(anError)
+          return
+        }
+        completionHandler(error)
+    }
+  }
+  
 }

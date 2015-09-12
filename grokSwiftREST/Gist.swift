@@ -15,6 +15,9 @@ class Gist: ResponseJSONObjectSerializable {
   var ownerLogin: String?
   var ownerAvatarURL: String?
   var url: String?
+  var files:[File]?
+  var createdAt:NSDate?
+  var updatedAt:NSDate?
   
   required init(json: JSON) {
     self.description = json["description"].string
@@ -22,8 +25,44 @@ class Gist: ResponseJSONObjectSerializable {
     self.ownerLogin = json["owner"]["login"].string
     self.ownerAvatarURL = json["owner"]["avatar_url"].string
     self.url = json["url"].string
+    
+    // files
+    self.files = [File]()
+    if let filesJSON = json["files"].dictionary {
+      for (_, fileJSON) in filesJSON {
+        if let newFile = File(json: fileJSON) {
+          self.files?.append(newFile)
+        }
+      }
+    }
+    
+    // Dates
+    let dateFormatter = Gist.sharedDateFormatter
+    if let dateString = json["created_at"].string {
+      self.createdAt = dateFormatter.dateFromString(dateString)
+    }
+    if let dateString = json["updated_at"].string {
+      self.updatedAt = dateFormatter.dateFromString(dateString)
+    }
   }
   
   required init() {
+  }
+  
+  static let sharedDateFormatter = Gist.dateFormatter()
+  
+  class func dateFormatter() -> NSDateFormatter {
+    let aDateFormatter = NSDateFormatter()
+    // set the format as a text string
+    // we might get away with just doing this one line configuration for the date formatter
+    aDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+    // but we if leave it at that then the user's settings for datetime & locale
+    // can mess it up. So:
+    // the 'Z' at the end means it's UTC (aka, Zulu time), so let's tell
+    aDateFormatter.timeZone = NSTimeZone(abbreviation: "UTC")
+    // dates coming from an english webserver are generally en_US_POSIX locale
+    // this would be different if your server spoke Spanish, Chinese, etc
+    aDateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+    return aDateFormatter
   }
 }

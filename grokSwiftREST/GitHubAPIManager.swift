@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import Locksmith
 
 class GitHubAPIManager {
   static let sharedInstance = GitHubAPIManager()
@@ -17,18 +18,46 @@ class GitHubAPIManager {
   var clientID: String = "1234567890"
   var clientSecret: String = "abcdefghijkl"
   
-  var OAuthToken: String?
+  var OAuthToken: String? {
+    set {
+      if let valueToSave = newValue {
+        do {
+          try Locksmith.saveData(["token": valueToSave], forUserAccount: "github")
+        } catch {
+          let _ = try? Locksmith.deleteDataForUserAccount("github")
+        }
+        addSessionHeader("Authorization", value: "token \(valueToSave)")
+      }
+      else { // they set it to nil, so delete it
+        let _ = try? Locksmith.deleteDataForUserAccount("github")
+        removeSessionHeaderIfExists("Authorization")
+      }
+    }
+    get {
+      // try to load from keychain
+      Locksmith.loadDataForUserAccount("github")
+      let dictionary = Locksmith.loadDataForUserAccount("github")
+      if let token =  dictionary?["token"] as? String {
+        return token
+      }
+      removeSessionHeaderIfExists("Authorization")
+      return nil
+    }
+  }
   
   init () {
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
     configuration.HTTPAdditionalHeaders = Manager.defaultHTTPHeaders
     let manager = Alamofire.Manager(configuration: configuration)
     alamofireManager = manager
-    addSessionHeader(alamofireManager, key: "Accept", value: "application/vnd.github.v3+json")
+    addSessionHeader("Accept", value: "application/vnd.github.v3+json")
+    if hasOAuthToken() {
+      addSessionHeader("Authorization", value: "token \(OAuthToken!)")
+    }
   }
   
   // MARK: - Headers
-  func addSessionHeader(manager: Alamofire.Manager, key: String, value: String) {
+  func addSessionHeader(key: String, value: String) {
     var headers:[NSObject : AnyObject]
     if let existingHeaders = alamofireManager.session.configuration.HTTPAdditionalHeaders as? [String: String] {
       headers = existingHeaders
@@ -42,7 +71,7 @@ class GitHubAPIManager {
     alamofireManager = Alamofire.Manager(configuration: config)
   }
   
-  func removeSessionHeaderIfExists(manager: Alamofire.Manager, key: String) {
+  func removeSessionHeaderIfExists(key: String) {
     if var headers = alamofireManager.session.configuration.HTTPAdditionalHeaders as? [String: String] {
       headers.removeValueForKey(key)
       let config = alamofireManager.session.configuration
@@ -72,7 +101,9 @@ class GitHubAPIManager {
   
   // MARK: - OAuth 2.0
   func hasOAuthToken() -> Bool {
-    // TODO: implement
+    if let token = self.OAuthToken {
+      return !token.isEmpty
+    }
     return false
   }
   
@@ -80,10 +111,15 @@ class GitHubAPIManager {
   
   func startOAuth2Login() {
     let authPath:String = "https://github.com/login/oauth/authorize?client_id=\(clientID)&scope=gist&state=TEST_STATE"
+    
     if let authURL:NSURL = NSURL(string: authPath) {
+      // set loadingOAuthToken true here in case we
+      // later use this code without didTapLoginButton()
+      let defaults = NSUserDefaults.standardUserDefaults()
+      defaults.setBool(true, forKey: "loadingOAuthToken")
+      
       UIApplication.sharedApplication().openURL(authURL)
     }
-    // TODO: get and print starred gists
   }
   
   func processOAuthStep1Response(url: NSURL) {
@@ -132,6 +168,10 @@ class GitHubAPIManager {
             }
           }
         }
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setBool(false, forKey: "loadingOAuthToken")
+        
         if (self.hasOAuthToken()) {
           self.printMyStarredGistsWithOAuth2()
         }

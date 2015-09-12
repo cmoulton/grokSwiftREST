@@ -48,7 +48,10 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     
-    loadInitialData()
+    let defaults = NSUserDefaults.standardUserDefaults()
+    if (!defaults.boolForKey("loadingOAuthToken")) {
+      loadInitialData()
+    }
   }
   
   func loadInitialData() {
@@ -184,6 +187,9 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   
   // MARK: - Login View Delegate
   func didTapLoginButton() {
+    let defaults = NSUserDefaults.standardUserDefaults()
+    defaults.setBool(true, forKey: "loadingOAuthToken")
+    
     self.dismissViewControllerAnimated(false, completion: nil)
     GitHubAPIManager.sharedInstance.startOAuth2Login()
   }

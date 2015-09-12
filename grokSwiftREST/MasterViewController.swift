@@ -157,13 +157,12 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
       if let indexPath = self.tableView.indexPathForSelectedRow {
         let object = gists[indexPath.row] as Gist
         let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-        controller.detailItem = object
+        controller.gist = object
         controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
         controller.navigationItem.leftItemsSupplementBackButton = true
       }
     }
   }
-  
   
   // MARK: - Table View
   

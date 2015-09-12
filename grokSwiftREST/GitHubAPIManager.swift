@@ -179,14 +179,19 @@ class GitHubAPIManager {
   }
   
   // MARK: - OAuth calls
-  
   func printMyStarredGistsWithOAuth2() -> Void {
-    Alamofire.request(.GET, "https://api.github.com/gists/starred")
+    let starredGistsRequest = alamofireManager.request(.GET, "https://api.github.com/gists/starred")
       .responseString { _, _, result in
+        guard result.error == nil else {
+          print(result.error)
+          GitHubAPIManager.sharedInstance.OAuthToken = nil
+          return
+        }
         if let receivedString = result.value {
           print(receivedString)
         }
     }
+    debugPrint(starredGistsRequest)
   }
   
   // MARK: - Public Gists

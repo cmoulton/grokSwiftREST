@@ -402,4 +402,36 @@ class GitHubAPIManager {
     }
   }
   
+  func createNewGist(description: String, isPublic: Bool, files: [File], completionHandler: (Bool?, NSError?) -> Void) {
+    let publicString: String
+    if isPublic {
+      publicString = "true"
+    } else {
+      publicString = "false"
+    }
+    
+    var filesDictionary = [String: AnyObject]()
+    for file in files {
+      if let name = file.filename, contents = file.contents {
+        filesDictionary[name] = ["content": contents]
+      }
+    }
+    let parameters:[String: AnyObject] = [
+      "description": description,
+      "isPublic": publicString,
+      "files" : filesDictionary
+    ]
+    
+    let urlString = "https://api.github.com/gists"
+    alamofireManager.request(.POST, urlString, parameters: parameters, encoding: .JSON)
+      .response { (request, response, data, error) in
+        if let anError = error {
+          print(anError)
+          completionHandler(false, nil)
+          return
+        }
+        completionHandler(true, nil)
+    }
+  }
+  
 }

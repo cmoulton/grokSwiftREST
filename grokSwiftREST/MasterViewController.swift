@@ -105,6 +105,20 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
             if error.code == NSURLErrorUserAuthenticationRequired {
               self.showOAuthLoginView()
             } else if error.code == NSURLErrorNotConnectedToInternet {
+              let path:Path
+              if self.gistSegmentedControl.selectedSegmentIndex == 0 {
+                path = .Public
+              } else if self.gistSegmentedControl.selectedSegmentIndex == 1 {
+                path = .Starred
+              } else {
+                path = .MyGists
+              }
+              if let archived:[Gist] = PersistenceManager.loadArray(path) {
+                self.gists = archived
+              } else {
+                self.gists = [] // don't have any saved gists
+              }
+              
               // show not connected error & tell em to try again when they do have a connection
               // check for existing banner
               if let existingBanner = self.notConnectedBanner {
@@ -128,6 +142,16 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
         } else {
           self.gists = fetchedGists
         }
+        
+        let path:Path
+        if self.gistSegmentedControl.selectedSegmentIndex == 0 {
+          path = .Public
+        } else if self.gistSegmentedControl.selectedSegmentIndex == 1 {
+          path = .Starred
+        } else {
+          path = .MyGists
+        }
+        PersistenceManager.saveArray(self.gists, path: path)
       }
       
       // update "last updated" title for refresh control

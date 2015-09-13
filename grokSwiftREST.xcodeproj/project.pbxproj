@@ -24,6 +24,7 @@
 		CFE6B6DF1BA39AA8002A9C08 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6DE1BA39AA8002A9C08 /* LoginViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		CFE6B6E11BA44AE1002A9C08 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6E01BA44AE1002A9C08 /* File.swift */; settings = {ASSET_TAGS = (); }; };
 		CFE6B6E31BA46600002A9C08 /* CreateGistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6E21BA46600002A9C08 /* CreateGistViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		CFE762BE1BA60770003C3F75 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE762BD1BA60770003C3F75 /* PersistenceManager.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		CFE6B6DE1BA39AA8002A9C08 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		CFE6B6E01BA44AE1002A9C08 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		CFE6B6E21BA46600002A9C08 /* CreateGistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateGistViewController.swift; sourceTree = "<group>"; };
+		CFE762BD1BA60770003C3F75 /* PersistenceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 				CFE6B6D41BA34BAA002A9C08 /* GitHubAPIManager.swift */,
 				CFE6B6D61BA34CB2002A9C08 /* Gist.swift */,
 				CFE6B6E01BA44AE1002A9C08 /* File.swift */,
+				CFE762BD1BA60770003C3F75 /* PersistenceManager.swift */,
 				CFE6B6DA1BA350BA002A9C08 /* AlamofireRequest+JSONSerializable.swift */,
 				CFE6B6D81BA35081002A9C08 /* ResponseJSONObjectSerializable.swift */,
 				CFE6B6AA1BA34776002A9C08 /* Main.storyboard */,
@@ -367,6 +370,7 @@
 				CFE6B6A71BA34776002A9C08 /* MasterViewController.swift in Sources */,
 				CFE6B6E11BA44AE1002A9C08 /* File.swift in Sources */,
 				CFE6B6A51BA34776002A9C08 /* AppDelegate.swift in Sources */,
+				CFE762BE1BA60770003C3F75 /* PersistenceManager.swift in Sources */,
 				CFE6B6E31BA46600002A9C08 /* CreateGistViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

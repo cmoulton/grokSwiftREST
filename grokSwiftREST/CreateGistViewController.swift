@@ -89,6 +89,7 @@ class CreateGistViewController: XLFormViewController {
             // add ok button
             let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
             alertController.addAction(okAction)
+            self.presentViewController(alertController, animated:true, completion: nil)
             return
           }
           self.navigationController?.popViewControllerAnimated(true)

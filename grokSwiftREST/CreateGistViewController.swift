@@ -81,17 +81,17 @@ class CreateGistViewController: XLFormViewController {
         }
         GitHubAPIManager.sharedInstance.createNewGist(description, isPublic: isPublic, files: files, completionHandler: {
           (success, error) in
-          if let anError = error {
-            print(anError)
-            let alertController = UIAlertController(title: "Could not creat gist", message: "Sorry, your gist couldn't be deleted. Maybe GitHub is down or you don't have an internet connection.\n\nError:" + anError.localizedDescription, preferredStyle: .Alert)
+          guard error == nil, let successValue = success where successValue == true else {
+            if let anError = error {
+              print(anError)
+            }
+            let alertController = UIAlertController(title: "Could not create gist", message: "Sorry, your gist couldn't be deleted. Maybe GitHub is down or you don't have an internet connection.", preferredStyle: .Alert)
             // add ok button
             let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
             alertController.addAction(okAction)
-          } else if let successValue = success {
-            if successValue == true {
-              self.navigationController?.popViewControllerAnimated(true)
-            }
+            return
           }
+          self.navigationController?.popViewControllerAnimated(true)
         })
     }
   }

@@ -74,9 +74,11 @@ class GitHubAPIManager {
     if let existingHeaders = alamofireManager.session.configuration.HTTPAdditionalHeaders as? [String: String] {
       headers = existingHeaders
     } else {
-      headers = [NSObject : AnyObject]()
+      headers = Manager.defaultHTTPHeaders
     }
     headers[key] = value
+    
+    
     let config = alamofireManager.session.configuration
     config.HTTPAdditionalHeaders = headers
     print(config.HTTPAdditionalHeaders)
@@ -84,11 +86,10 @@ class GitHubAPIManager {
   }
   
   func removeSessionHeaderIfExists(key: String) {
-    if var headers = alamofireManager.session.configuration.HTTPAdditionalHeaders as? [String: String] {
+    let config = alamofireManager.session.configuration
+    if var headers = config.HTTPAdditionalHeaders {
       headers.removeValueForKey(key)
-      let config = alamofireManager.session.configuration
       config.HTTPAdditionalHeaders = headers
-      print(config.HTTPAdditionalHeaders)
       alamofireManager = Alamofire.Manager(configuration: config)
     }
   }

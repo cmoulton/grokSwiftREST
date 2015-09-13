@@ -9,9 +9,9 @@
 import Foundation
 import SwiftyJSON
 
-class Gist: ResponseJSONObjectSerializable {
+class Gist: NSObject, NSCoding, ResponseJSONObjectSerializable {
   var id: String?
-  var description: String?
+  var gistDescription: String?
   var ownerLogin: String?
   var ownerAvatarURL: String?
   var url: String?
@@ -20,7 +20,7 @@ class Gist: ResponseJSONObjectSerializable {
   var updatedAt:NSDate?
   
   required init(json: JSON) {
-    self.description = json["description"].string
+    self.gistDescription = json["description"].string
     self.id = json["id"].string
     self.ownerLogin = json["owner"]["login"].string
     self.ownerAvatarURL = json["owner"]["avatar_url"].string
@@ -46,7 +46,31 @@ class Gist: ResponseJSONObjectSerializable {
     }
   }
   
-  required init() {
+  required override init() {
+  }
+  
+  // MARK: NSCoding
+  @objc func encodeWithCoder(aCoder: NSCoder) {
+    aCoder.encodeObject(self.id, forKey: "id")
+    aCoder.encodeObject(self.gistDescription, forKey: "gistDescription")
+    aCoder.encodeObject(self.ownerLogin, forKey: "ownerLogin")
+    aCoder.encodeObject(self.ownerAvatarURL, forKey: "ownerAvatarURL")
+    aCoder.encodeObject(self.url, forKey: "url")
+    aCoder.encodeObject(self.createdAt, forKey: "createdAt")
+    aCoder.encodeObject(self.updatedAt, forKey: "updatedAt")
+    aCoder.encodeObject(self.files, forKey: "files")
+  }
+  
+  @objc required convenience init?(coder aDecoder: NSCoder) {
+    self.init()
+    
+    self.id = aDecoder.decodeObjectForKey("id") as? String
+    self.gistDescription = aDecoder.decodeObjectForKey("gistDescription") as? String
+    self.ownerLogin = aDecoder.decodeObjectForKey("ownerLogin") as? String
+    self.ownerAvatarURL = aDecoder.decodeObjectForKey("ownerAvatarURL") as? String
+    self.createdAt = aDecoder.decodeObjectForKey("createdAt") as? NSDate
+    self.updatedAt = aDecoder.decodeObjectForKey("updatedAt") as? NSDate
+    self.files = aDecoder.decodeObjectForKey("files") as? [File]
   }
   
   static let sharedDateFormatter = Gist.dateFormatter()

@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import PINRemoteImage
+import BRYXBanner
 
 class MasterViewController: UITableViewController, LoginViewDelegate {
   var dateFormatter = NSDateFormatter()
@@ -16,6 +17,8 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   var gists = [Gist]()
   var nextPageURLString: String?
   var isLoading = false
+  var notConnectedBanner: Banner?
+  
   
   @IBOutlet weak var gistSegmentedControl: UISegmentedControl!
   
@@ -23,7 +26,7 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
     
-
+    
     if let split = self.splitViewController {
       let controllers = split.viewControllers
       self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -32,7 +35,7 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   
   override func viewWillAppear(animated: Bool) {
     self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
-
+    
     super.viewWillAppear(animated)
     
     // add refresh control for pull to refresh
@@ -52,6 +55,13 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
     if (!defaults.boolForKey("loadingOAuthToken")) {
       loadInitialData()
     }
+  }
+  
+  override func viewWillDisappear(animated: Bool) {
+    if let existingBanner = self.notConnectedBanner {
+      existingBanner.dismiss()
+    }
+    super.viewWillDisappear(animated)
   }
   
   func loadInitialData() {
@@ -91,8 +101,22 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
         
         self.isLoading = false
         if let error = result.error as? NSError {
-          if error.domain == NSURLErrorDomain && error.code == NSURLErrorUserAuthenticationRequired {
-            self.loadInitialData() // re-trigger oauth process
+          if error.domain == NSURLErrorDomain {
+            if error.code == NSURLErrorUserAuthenticationRequired {
+              self.showOAuthLoginView()
+            } else if error.code == NSURLErrorNotConnectedToInternet {
+              // show not connected error & tell em to try again when they do have a connection
+              // check for existing banner
+              if let existingBanner = self.notConnectedBanner {
+                existingBanner.dismiss()
+              }
+              self.notConnectedBanner = Banner(title: "No Internet Connection",
+                subtitle: "Could not load gists. Try again when you're connected to the internet",
+                image: nil,
+                backgroundColor: UIColor.redColor())
+            }
+            self.notConnectedBanner?.dismissesOnSwipe = true
+            self.notConnectedBanner?.show(duration: nil)
           }
         }
         return
@@ -250,7 +274,7 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   
   // MARK: - Segmented Control
   @IBAction func segmentedControlValueChanged(sender: UISegmentedControl) {
-    // only show add button for my gists
+    // only show add/edit buttons for my gists
     if (gistSegmentedControl.selectedSegmentIndex == 2) {
       self.navigationItem.leftBarButtonItem = self.editButtonItem()
       let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
@@ -259,6 +283,11 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
       self.navigationItem.leftBarButtonItem = nil
       self.navigationItem.rightBarButtonItem = nil
     }
+    
+    // clear gists so they can't get shown for the wrong list
+    self.gists = [Gist]()
+    self.tableView.reloadData()
+    
     loadGists(nil)
   }
 }

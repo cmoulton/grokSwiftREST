@@ -19,15 +19,7 @@ extension Alamofire.Request {
         return .Failure(data, error)
       }
       
-      let jsonData: AnyObject?
-      do {
-        jsonData = try NSJSONSerialization.JSONObjectWithData(responseData, options: [])
-      } catch  {
-        let error = Error.errorWithCode(.JSONSerializationFailed, failureReason: "JSON could not be converted to data")
-        return .Failure(responseData, error)
-      }
-      
-      let json = SwiftyJSON.JSON(jsonData!)
+      let json = SwiftyJSON.JSON(data: responseData)
       if let newObject = T(json: json) {
         // TODO: should this be a failable init?
         return .Success(newObject)
@@ -48,15 +40,7 @@ extension Alamofire.Request {
         return .Failure(data, error)
       }
       
-      let jsonData: AnyObject?
-      do {
-        jsonData = try NSJSONSerialization.JSONObjectWithData(responseData, options: [])
-      } catch  {
-        let error = Error.errorWithCode(.JSONSerializationFailed, failureReason: "JSON could not be converted to object")
-        return .Failure(responseData, error)
-      }
-      
-      let json = SwiftyJSON.JSON(jsonData!)
+      let json = SwiftyJSON.JSON(data: responseData)
       var objects: [T] = []
       for (_, item) in json {
         if let object = T(json: item) {

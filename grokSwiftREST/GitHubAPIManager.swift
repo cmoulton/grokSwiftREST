@@ -10,10 +10,12 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 import Locksmith
+import Reachability
 
 class GitHubAPIManager {
   static let sharedInstance = GitHubAPIManager()
   var alamofireManager:Alamofire.Manager
+  var reach: Reachability?
   
   static let ErrorDomain = "com.error.GitHubAPIManager"
   
@@ -121,24 +123,29 @@ class GitHubAPIManager {
   }
   
   // MARK: - OAuth flow
-  
   func startOAuth2Login() {
-    var success = false
-    
     let defaults = NSUserDefaults.standardUserDefaults()
     defaults.setBool(true, forKey: "loadingOAuthToken")
     
     let authPath:String = "https://github.com/login/oauth/authorize?client_id=\(clientID)&scope=gist&state=TEST_STATE"
-    
-    if let authURL:NSURL = NSURL(string: authPath) {
-      // set loadingOAuthToken true here in case we
-      // later use this code without didTapLoginButton()
-      let defaults = NSUserDefaults.standardUserDefaults()
-      defaults.setBool(true, forKey: "loadingOAuthToken")
-      
-      success = UIApplication.sharedApplication().openURL(authURL)
+    guard let authURL:NSURL = NSURL(string: authPath) else {
+      defaults.setBool(false, forKey: "loadingOAuthToken")
+      if let completionHandler = self.OAuthTokenCompletionHandler {
+        let error = NSError(domain: GitHubAPIManager.ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not create an OAuth authorization URL", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
+        completionHandler(error)
+      }
+      return
     }
     
+    guard Reachability.reachabilityForInternetConnection().isReachable() == true else {
+      if let completionHandler = self.OAuthTokenCompletionHandler {
+        let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: [NSLocalizedDescriptionKey: "No internet connection", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
+        completionHandler(error)
+      }
+      return
+    }
+    
+    let success = UIApplication.sharedApplication().openURL(authURL)
     if (!success) {
       defaults.setBool(false, forKey: "loadingOAuthToken")
       if let completionHandler = self.OAuthTokenCompletionHandler {

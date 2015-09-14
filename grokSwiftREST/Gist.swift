@@ -58,7 +58,9 @@ class Gist: NSObject, NSCoding, ResponseJSONObjectSerializable {
     aCoder.encodeObject(self.url, forKey: "url")
     aCoder.encodeObject(self.createdAt, forKey: "createdAt")
     aCoder.encodeObject(self.updatedAt, forKey: "updatedAt")
-    aCoder.encodeObject(self.files, forKey: "files")
+    if let files = self.files {
+      aCoder.encodeObject(files, forKey: "files")
+    }
   }
   
   @objc required convenience init?(coder aDecoder: NSCoder) {
@@ -70,7 +72,9 @@ class Gist: NSObject, NSCoding, ResponseJSONObjectSerializable {
     self.ownerAvatarURL = aDecoder.decodeObjectForKey("ownerAvatarURL") as? String
     self.createdAt = aDecoder.decodeObjectForKey("createdAt") as? NSDate
     self.updatedAt = aDecoder.decodeObjectForKey("updatedAt") as? NSDate
-    self.files = aDecoder.decodeObjectForKey("files") as? [File]
+    if let files = aDecoder.decodeObjectForKey("files") as? [File] {
+      self.files = files
+    }
   }
   
   static let sharedDateFormatter = Gist.dateFormatter()

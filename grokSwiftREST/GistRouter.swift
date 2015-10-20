@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 enum GistRouter: URLRequestConvertible {
-  static let baseURLString:String = "https://api.github.com/"
+  static let baseURLString:String = "https://api.github.com"
 
   case GetPublic() // GET "https://api.github.com/gists/public"
   case GetMyStarred() // GET "https://api.github.com/gists/starred"
@@ -49,34 +49,32 @@ enum GistRouter: URLRequestConvertible {
     let result: (path: String, parameters: [String: AnyObject]?) = {
       switch self {
       case .GetPublic:
-        return ("gists/public", nil)
+        return ("/gists/public", nil)
       case .GetMyStarred:
-        return ("gists/starred", nil)
+        return ("/gists/starred", nil)
       case .GetMine:
-        return ("gists", nil)
+        return ("/gists", nil)
       case .GetAtPath(let path):
-        return (path, nil) // TODO!
+        let URL = NSURL(string: path)
+        let relativePath = URL!.relativePath!
+        return (relativePath, nil)
       case .IsStarred(let id):
-        return ("gists/\(id)/star", nil)
+        return ("/gists/\(id)/star", nil)
       case .Star(let id):
-        return ("gists/\(id)/star", nil)
+        return ("/gists/\(id)/star", nil)
       case .Unstar(let id):
-        return ("gists/\(id)/star", nil)
+        return ("/gists/\(id)/star", nil)
       case .Create(let params):
-        return ("gists", params)
+        return ("/gists", params)
       case .Delete(let id):
-        return ("gists/\(id)", nil)
+        return ("/gists/\(id)", nil)
       }
     }()
     
     let URL = NSURL(string: GistRouter.baseURLString)!
-    // TODO: test with .GetAtPath
     let URLRequest = NSMutableURLRequest(URL: URL.URLByAppendingPathComponent(result.path))
     
-    // Set Accept header
-    URLRequest.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
-    
-    // Set OAuth token
+    // Set OAuth token if we have one
     if let token = GitHubAPIManager.sharedInstance.OAuthToken {
       URLRequest.setValue("token \(token)", forHTTPHeaderField: "Authorization")
     }

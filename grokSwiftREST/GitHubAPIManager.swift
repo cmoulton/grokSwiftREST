@@ -367,7 +367,6 @@ class GitHubAPIManager {
   
   func unstarGist(gistId: String, completionHandler: (NSError?) -> Void) {
     //  PUT /gists/:id/star
-    let urlString = "https://api.github.com/gists/\(gistId)/star"
     alamofireManager.request(GistRouter.Unstar(gistId))
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
@@ -389,7 +388,6 @@ class GitHubAPIManager {
   // MARK: Delete and Add
   func deleteGist(gistId: String, completionHandler: (NSError?) -> Void) {
     // DELETE /gists/:id
-    let urlString = "https://api.github.com/gists/\(gistId)"
     alamofireManager.request(GistRouter.Delete(gistId))
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {

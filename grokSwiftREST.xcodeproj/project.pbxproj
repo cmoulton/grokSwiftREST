@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C486DBD6014F8BA62BDB93A7 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D69B16AB3D445DF4545C9C5 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		CF30475B1BD6D5780006CC45 /* GistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF30475A1BD6D5780006CC45 /* GistRouter.swift */; settings = {ASSET_TAGS = (); }; };
 		CFE6B6A51BA34776002A9C08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */; };
 		CFE6B6A71BA34776002A9C08 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */; };
 		CFE6B6A91BA34776002A9C08 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A81BA34776002A9C08 /* DetailViewController.swift */; };
@@ -48,6 +49,7 @@
 		1D69B16AB3D445DF4545C9C5 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		575242F5DE3A241119C96727 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		8F1EEA2724E7063262E9981E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		CF30475A1BD6D5780006CC45 /* GistRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistRouter.swift; sourceTree = "<group>"; };
 		CFE6B6A11BA34776002A9C08 /* grokSwiftREST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = grokSwiftREST.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				CFE6B6DE1BA39AA8002A9C08 /* LoginViewController.swift */,
 				CFE6B6E21BA46600002A9C08 /* CreateGistViewController.swift */,
 				CFE6B6D41BA34BAA002A9C08 /* GitHubAPIManager.swift */,
+				CF30475A1BD6D5780006CC45 /* GistRouter.swift */,
 				CFE6B6D61BA34CB2002A9C08 /* Gist.swift */,
 				CFE6B6E01BA44AE1002A9C08 /* File.swift */,
 				CFE762BD1BA60770003C3F75 /* PersistenceManager.swift */,
@@ -365,6 +368,7 @@
 				CFE6B6A91BA34776002A9C08 /* DetailViewController.swift in Sources */,
 				CFE6B6D91BA35081002A9C08 /* ResponseJSONObjectSerializable.swift in Sources */,
 				CFE6B6D51BA34BAA002A9C08 /* GitHubAPIManager.swift in Sources */,
+				CF30475B1BD6D5780006CC45 /* GistRouter.swift in Sources */,
 				CFE6B6DF1BA39AA8002A9C08 /* LoginViewController.swift in Sources */,
 				CFE6B6DB1BA350BA002A9C08 /* AlamofireRequest+JSONSerializable.swift in Sources */,
 				CFE6B6A71BA34776002A9C08 /* MasterViewController.swift in Sources */,

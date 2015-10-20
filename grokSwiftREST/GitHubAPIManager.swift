@@ -40,11 +40,9 @@ class GitHubAPIManager {
         } catch {
           let _ = try? Locksmith.deleteDataForUserAccount("github")
         }
-        addSessionHeader("Authorization", value: "token \(valueToSave)")
       }
       else { // they set it to nil, so delete it
         let _ = try? Locksmith.deleteDataForUserAccount("github")
-        removeSessionHeaderIfExists("Authorization")
       }
     }
     get {
@@ -54,46 +52,13 @@ class GitHubAPIManager {
       if let token =  dictionary?["token"] as? String {
         return token
       }
-      removeSessionHeaderIfExists("Authorization")
       return nil
     }
   }
   
   init () {
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-    configuration.HTTPAdditionalHeaders = Manager.defaultHTTPHeaders
-    let manager = Alamofire.Manager(configuration: configuration)
-    alamofireManager = manager
-    addSessionHeader("Accept", value: "application/vnd.github.v3+json")
-    if hasOAuthToken() {
-      addSessionHeader("Authorization", value: "token \(OAuthToken!)")
-    }
-  }
-  
-  // MARK: - Headers
-  func addSessionHeader(key: String, value: String) {
-    var headers:[NSObject : AnyObject]
-    if let existingHeaders = alamofireManager.session.configuration.HTTPAdditionalHeaders as? [String: String] {
-      headers = existingHeaders
-    } else {
-      headers = Manager.defaultHTTPHeaders
-    }
-    headers[key] = value
-    
-    
-    let config = alamofireManager.session.configuration
-    config.HTTPAdditionalHeaders = headers
-    print(config.HTTPAdditionalHeaders)
-    alamofireManager = Alamofire.Manager(configuration: config)
-  }
-  
-  func removeSessionHeaderIfExists(key: String) {
-    let config = alamofireManager.session.configuration
-    if var headers = config.HTTPAdditionalHeaders {
-      headers.removeValueForKey(key)
-      config.HTTPAdditionalHeaders = headers
-      alamofireManager = Alamofire.Manager(configuration: config)
-    }
+    alamofireManager = Alamofire.Manager(configuration: configuration)
   }
   
   // MARK: - Basic Auth
@@ -231,7 +196,7 @@ class GitHubAPIManager {
   
   // MARK: - OAuth calls
   func printMyStarredGistsWithOAuth2() -> Void {
-    let starredGistsRequest = alamofireManager.request(.GET, "https://api.github.com/gists/starred")
+    let starredGistsRequest = alamofireManager.request(GistRouter.GetMyStarred())
       .responseString { response in
         guard response.result.error == nil else {
           print(response.result.error!)
@@ -247,7 +212,7 @@ class GitHubAPIManager {
   
   // MARK: - Public Gists
   func printPublicGists() -> Void {
-    alamofireManager.request(.GET, "https://api.github.com/gists/public")
+    alamofireManager.request(GistRouter.GetPublic())
       .responseString { response in
         if let receivedString = response.result.value {
           print(receivedString)
@@ -255,18 +220,18 @@ class GitHubAPIManager {
     }
   }
   
-  private func handleUnauthorizedResponse(urlString: String) -> NSError {
+  private func handleUnauthorizedResponse() -> NSError {
     self.OAuthToken = nil
     let lostOAuthError = NSError(domain: NSURLErrorDomain, code: NSURLErrorUserAuthenticationRequired, userInfo: [NSLocalizedDescriptionKey: "Not Logged In", NSLocalizedRecoverySuggestionErrorKey: "Please re-enter your GitHub credentials"])
     return lostOAuthError
   }
   
   func getGists(urlString: String, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
-    alamofireManager.request(.GET, urlString)
+    alamofireManager.request(GistRouter.GetAtPath(urlString))
       .validate()
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
-          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          let lostOAuthError = self.handleUnauthorizedResponse()
           completionHandler(.Failure(lostOAuthError), nil)
           return // don't bother with .responseArray, we didn't get any data
         }
@@ -312,6 +277,7 @@ class GitHubAPIManager {
   
   // MARK: - Images
   func imageFromURLString(imageURLString: String, completionHandler: (UIImage?, NSError?) -> Void) {
+    // TODO: test for need of headers?
     alamofireManager.request(.GET, imageURLString)
       .response { (request, response, data, error) in
         // use the generic response serializer that returns NSData
@@ -356,12 +322,11 @@ class GitHubAPIManager {
   // MARK: Starring / Unstarring / Star status
   func isGistStarred(gistId: String, completionHandler: Result<Bool, NSError> -> Void) {
     // GET /gists/:id/star
-    let urlString = "https://api.github.com/gists/\(gistId)/star"
-    alamofireManager.request(.GET, urlString)
+    alamofireManager.request(GistRouter.IsStarred(gistId))
       .validate(statusCode: [204])
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
-          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          let lostOAuthError = self.handleUnauthorizedResponse()
           completionHandler(.Failure(lostOAuthError))
           return // don't bother with .responseArray, we didn't get any data
         }
@@ -383,11 +348,10 @@ class GitHubAPIManager {
   
   func starGist(gistId: String, completionHandler: (NSError?) -> Void) {
     //  PUT /gists/:id/star
-    let urlString = "https://api.github.com/gists/\(gistId)/star"
-    alamofireManager.request(.PUT, urlString)
+    alamofireManager.request(GistRouter.Star(gistId))
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
-          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          let lostOAuthError = self.handleUnauthorizedResponse()
           completionHandler(lostOAuthError)
           return // don't bother with .responseArray, we didn't get any data
         }
@@ -404,10 +368,10 @@ class GitHubAPIManager {
   func unstarGist(gistId: String, completionHandler: (NSError?) -> Void) {
     //  PUT /gists/:id/star
     let urlString = "https://api.github.com/gists/\(gistId)/star"
-    alamofireManager.request(.DELETE, urlString)
+    alamofireManager.request(GistRouter.Unstar(gistId))
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
-          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          let lostOAuthError = self.handleUnauthorizedResponse()
           completionHandler(lostOAuthError)
           return // don't bother with .responseArray, we didn't get any data
         }
@@ -426,10 +390,10 @@ class GitHubAPIManager {
   func deleteGist(gistId: String, completionHandler: (NSError?) -> Void) {
     // DELETE /gists/:id
     let urlString = "https://api.github.com/gists/\(gistId)"
-    alamofireManager.request(.DELETE, urlString)
+    alamofireManager.request(GistRouter.Delete(gistId))
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
-          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          let lostOAuthError = self.handleUnauthorizedResponse()
           completionHandler(lostOAuthError)
           return // don't bother with .responseArray, we didn't get any data
         }
@@ -463,11 +427,10 @@ class GitHubAPIManager {
       "files" : filesDictionary
     ]
     
-    let urlString = "https://api.github.com/gists"
-    alamofireManager.request(.POST, urlString, parameters: parameters, encoding: .JSON)
+    alamofireManager.request(GistRouter.Create(parameters))
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
-          let lostOAuthError = self.handleUnauthorizedResponse(urlString)
+          let lostOAuthError = self.handleUnauthorizedResponse()
           completionHandler(nil, lostOAuthError)
           return // don't bother with .responseArray, we didn't get any data
         }

@@ -35,8 +35,8 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
   func fetchStarredStatus() {
     if let gistId = gist?.id {
       GitHubAPIManager.sharedInstance.isGistStarred(gistId, completionHandler: {
-        (status, error) in
-        if let error = error {
+        result in
+        if let error = result.error {
           print(error)
           if error.domain == NSURLErrorDomain && error.code == NSURLErrorNotConnectedToInternet {
             // show not connected error & tell em to try again when they do have a connection
@@ -53,7 +53,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
           }
         }
         
-        if (self.isStarred == nil && status != nil) {// just got it
+        if let status = result.value where self.isStarred == nil {// just got it
           self.isStarred = status
           self.tableView?.insertRowsAtIndexPaths(
             [NSIndexPath(forRow: 2, inSection: 0)],

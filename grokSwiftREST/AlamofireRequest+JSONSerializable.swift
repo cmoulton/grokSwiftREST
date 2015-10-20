@@ -11,59 +11,79 @@ import Alamofire
 import SwiftyJSON
 
 extension Alamofire.Request {
-  public func responseObject<T: ResponseJSONObjectSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, Result<T>) -> Void) -> Self {
-    let responseSerializer = GenericResponseSerializer<T> { request, response, data in
+  public func responseObject<T: ResponseJSONObjectSerializable>(completionHandler: Response<T, NSError> -> Void) -> Self {
+    let serializer = ResponseSerializer<T, NSError> { request, response, data, error in
+      guard error == nil else {
+        return .Failure(error!)
+      }
       guard let responseData = data else {
-        let failureReason = "Array could not be serialized because input data was nil."
+        let failureReason = "Object could not be serialized because input data was nil."
         let error = Error.errorWithCode(.DataSerializationFailed, failureReason: failureReason)
-        return .Failure(data, error)
+        return .Failure(error)
       }
       
-      let json = SwiftyJSON.JSON(data: responseData)
-      if let newObject = T(json: json) {
-        // TODO: should this be a failable init?
-        return .Success(newObject)
-      }
-      let error = Error.errorWithCode(.JSONSerializationFailed, failureReason: "JSON could not be converted to object")
-      return .Failure(responseData, error)
-    }
-    
-    return response(responseSerializer: responseSerializer,
-      completionHandler: completionHandler)
-  }
-  
-  public func responseArray<T: ResponseJSONObjectSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, Result<[T]>) -> Void) -> Self {
-    let responseSerializer = GenericResponseSerializer<[T]> { request, response, data in
-      guard let responseData = data else {
-        let failureReason = "Array could not be serialized because input data was nil."
-        let error = Error.errorWithCode(.DataSerializationFailed, failureReason: failureReason)
-        return .Failure(data, error)
-      }
+      let JSONResponseSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
+      let result = JSONResponseSerializer.serializeResponse(request, response, responseData, error)
       
-      let json = SwiftyJSON.JSON(data: responseData)
-      var objects: [T] = []
-      for (_, item) in json {
-        if let object = T(json: item) {
-          objects.append(object)
+      switch result {
+      case .Success(let value):
+        let json = SwiftyJSON.JSON(value)
+        if let object = T(json: json) {
+          return .Success(object)
+        } else {
+          let failureReason = "Object could not be created from JSON."
+          let error = Error.errorWithCode(.JSONSerializationFailed, failureReason: failureReason)
+          return .Failure(error)
         }
+      case .Failure(let error):
+        return .Failure(error)
       }
-      return .Success(objects)
     }
     
-    return response(responseSerializer: responseSerializer,
-      completionHandler: completionHandler)
+    return response(responseSerializer: serializer, completionHandler: completionHandler)
   }
   
-  public func isUnauthorized(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, Result<Bool>) -> Void) -> Self {
-    let responseSerializer = GenericResponseSerializer<Bool> { request, response, data in
+  public func responseArray<T: ResponseJSONObjectSerializable>(completionHandler: Response<[T], NSError> -> Void) -> Self {
+    let serializer = ResponseSerializer<[T], NSError> { request, response, data, error in
+      guard error == nil else {
+        return .Failure(error!)
+      }
+      guard let responseData = data else {
+        let failureReason = "Object could not be serialized because input data was nil."
+        let error = Error.errorWithCode(.DataSerializationFailed, failureReason: failureReason)
+        return .Failure(error)
+      }
+      
+      let JSONResponseSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
+      let result = JSONResponseSerializer.serializeResponse(request, response, responseData, error)
+      
+      switch result {
+      case .Success(let value):
+        let json = SwiftyJSON.JSON(value)
+        var objects: [T] = []
+        for (_, item) in json {
+          if let object = T(json: item) {
+            objects.append(object)
+          }
+        }
+        return .Success(objects)
+      case .Failure(let error):
+        return .Failure(error)
+      }
+    }
+    
+    return response(responseSerializer: serializer, completionHandler: completionHandler)
+  }
+  
+  public func isUnauthorized(completionHandler: Response<Bool, NSError> -> Void) -> Self {
+    let serializer = ResponseSerializer<Bool, NSError> { request, response, data, error in
       if let code = response?.statusCode {
-        return Result.Success(code == 401)
+        return .Success(code == 401)
       }
       let error = Error.errorWithCode(.StatusCodeValidationFailed, failureReason: "No status code received")
-      return .Failure(nil, error)
+      return .Failure(error)
     }
     
-    return response(responseSerializer: responseSerializer,
-      completionHandler: completionHandler)
+    return response(responseSerializer: serializer, completionHandler: completionHandler)
   }
 }

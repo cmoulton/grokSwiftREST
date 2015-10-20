@@ -107,8 +107,8 @@ class GitHubAPIManager {
     let headers = ["Authorization": "Basic \(base64Credentials)"]
     
     Alamofire.request(.GET, "https://api.github.com/gists/starred", headers: headers)
-      .responseString { _, _, result in
-        if let receivedString = result.value {
+      .responseString { response in
+        if let receivedString = response.result.value {
           print(receivedString)
         }
     }
@@ -185,18 +185,18 @@ class GitHubAPIManager {
     let tokenParams = ["client_id": clientID, "client_secret": clientSecret, "code": receivedCode]
     let jsonHeader = ["Accept": "application/json"]
     Alamofire.request(.POST, getTokenPath, parameters: tokenParams, headers: jsonHeader)
-      .responseString { (request, response, result) in
-        if let anError = result.error {
+      .responseString { response in
+        if let error = response.result.error {
           let defaults = NSUserDefaults.standardUserDefaults()
           defaults.setBool(false, forKey: "loadingOAuthToken")
           
           if let completionHandler = self.OAuthTokenCompletionHandler {
-            completionHandler(anError as NSError)
+            completionHandler(error)
           }
           return
         }
-        print(result.value)
-        if let receivedResults = result.value, jsonData = receivedResults.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+        print(response.result.value)
+        if let receivedResults = response.result.value, jsonData = receivedResults.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
           let jsonResults = JSON(data: jsonData)
           for (key, value) in jsonResults {
             switch key {
@@ -232,13 +232,13 @@ class GitHubAPIManager {
   // MARK: - OAuth calls
   func printMyStarredGistsWithOAuth2() -> Void {
     let starredGistsRequest = alamofireManager.request(.GET, "https://api.github.com/gists/starred")
-      .responseString { _, _, result in
-        guard result.error == nil else {
-          print(result.error)
+      .responseString { response in
+        guard response.result.error == nil else {
+          print(response.result.error!)
           GitHubAPIManager.sharedInstance.OAuthToken = nil
           return
         }
-        if let receivedString = result.value {
+        if let receivedString = response.result.value {
           print(receivedString)
         }
     }
@@ -248,8 +248,8 @@ class GitHubAPIManager {
   // MARK: - Public Gists
   func printPublicGists() -> Void {
     alamofireManager.request(.GET, "https://api.github.com/gists/public")
-      .responseString { _, _, result in
-        if let receivedString = result.value {
+      .responseString { response in
+        if let receivedString = response.result.value {
           print(receivedString)
         }
     }
@@ -261,32 +261,32 @@ class GitHubAPIManager {
     return lostOAuthError
   }
   
-  func getGists(urlString: String, completionHandler: (Result<[Gist]>, String?) -> Void) {
+  func getGists(urlString: String, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
     alamofireManager.request(.GET, urlString)
       .validate()
-      .isUnauthorized { _, _, result in
-        if let unauthorized = result.value where unauthorized == true {
+      .isUnauthorized { response in
+        if let unauthorized = response.result.value where unauthorized == true {
           let lostOAuthError = self.handleUnauthorizedResponse(urlString)
-          completionHandler(.Failure(nil, lostOAuthError), nil)
+          completionHandler(.Failure(lostOAuthError), nil)
           return // don't bother with .responseArray, we didn't get any data
         }
       }
-      .responseArray { (request, response, result: Result<[Gist]>) in
-        guard result.error == nil,
-          let gists = result.value else {
-            print(result.error)
-            completionHandler(result, nil)
+      .responseArray { (response:Response<[Gist], NSError>) in
+        guard response.result.error == nil,
+          let gists = response.result.value else {
+            print(response.result.error)
+            completionHandler(response.result, nil)
             return
         }
         
         // need to figure out if this is the last page
         // check the link header, if present
-        let next = self.getNextPageFromHeaders(response)
+        let next = self.getNextPageFromHeaders(response.response)
         completionHandler(.Success(gists), next)
     }
   }
   
-  func getPublicGists(pageToLoad: String?, completionHandler: (Result<[Gist]>, String?) -> Void) {
+  func getPublicGists(pageToLoad: String?, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
     if let urlString = pageToLoad {
       getGists(urlString, completionHandler: completionHandler)
     } else {
@@ -294,7 +294,7 @@ class GitHubAPIManager {
     }
   }
   
-  func getMyStarredGists(pageToLoad: String?, completionHandler: (Result<[Gist]>, String?) -> Void) {
+  func getMyStarredGists(pageToLoad: String?, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
     if let urlString = pageToLoad {
       getGists(urlString, completionHandler: completionHandler)
     } else {
@@ -302,7 +302,7 @@ class GitHubAPIManager {
     }
   }
   
-  func getMyGists(pageToLoad: String?, completionHandler: (Result<[Gist]>, String?) -> Void) {
+  func getMyGists(pageToLoad: String?, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
     if let urlString = pageToLoad {
       getGists(urlString, completionHandler: completionHandler)
     } else {
@@ -354,67 +354,67 @@ class GitHubAPIManager {
   }
   
   // MARK: Starring / Unstarring / Star status
-  func isGistStarred(gistId: String, completionHandler: (Bool?, NSError?) -> Void) {
+  func isGistStarred(gistId: String, completionHandler: Result<Bool, NSError> -> Void) {
     // GET /gists/:id/star
     let urlString = "https://api.github.com/gists/\(gistId)/star"
     alamofireManager.request(.GET, urlString)
       .validate(statusCode: [204])
-      .isUnauthorized { _, _, result in
-        if let unauthorized = result.value where unauthorized == true {
+      .isUnauthorized { response in
+        if let unauthorized = response.result.value where unauthorized == true {
           let lostOAuthError = self.handleUnauthorizedResponse(urlString)
-          completionHandler(nil, lostOAuthError)
+          completionHandler(.Failure(lostOAuthError))
           return // don't bother with .responseArray, we didn't get any data
         }
       }
       .response { (request, response, data, error) in
         // 204 if starred, 404 if not
-        if let anError = error as? NSError {
-          print(anError)
+        if let error = error {
+          print(error)
           if response?.statusCode == 404 {
-            completionHandler(false, nil)
+            completionHandler(.Success(false))
             return
           }
-          completionHandler(nil, anError)
+          completionHandler(.Failure(error))
           return
         }
-        completionHandler(true, nil)
+        completionHandler(.Success(true))
     }
   }
   
-  func starGist(gistId: String, completionHandler: (ErrorType?) -> Void) {
+  func starGist(gistId: String, completionHandler: (NSError?) -> Void) {
     //  PUT /gists/:id/star
     let urlString = "https://api.github.com/gists/\(gistId)/star"
     alamofireManager.request(.PUT, urlString)
-      .isUnauthorized { _, _, result in
-        if let unauthorized = result.value where unauthorized == true {
+      .isUnauthorized { response in
+        if let unauthorized = response.result.value where unauthorized == true {
           let lostOAuthError = self.handleUnauthorizedResponse(urlString)
           completionHandler(lostOAuthError)
           return // don't bother with .responseArray, we didn't get any data
         }
       }
       .response { (request, response, data, error) in
-        if let anError = error {
-          print(anError)
+        if let error = error {
+          print(error)
           return
         }
         completionHandler(error)
     }
   }
   
-  func unstarGist(gistId: String, completionHandler: (ErrorType?) -> Void) {
+  func unstarGist(gistId: String, completionHandler: (NSError?) -> Void) {
     //  PUT /gists/:id/star
     let urlString = "https://api.github.com/gists/\(gistId)/star"
     alamofireManager.request(.DELETE, urlString)
-      .isUnauthorized { _, _, result in
-        if let unauthorized = result.value where unauthorized == true {
+      .isUnauthorized { response in
+        if let unauthorized = response.result.value where unauthorized == true {
           let lostOAuthError = self.handleUnauthorizedResponse(urlString)
           completionHandler(lostOAuthError)
           return // don't bother with .responseArray, we didn't get any data
         }
       }
       .response { (request, response, data, error) in
-        if let anError = error {
-          print(anError)
+        if let error = error {
+          print(error)
           return
         }
         completionHandler(error)
@@ -423,12 +423,12 @@ class GitHubAPIManager {
   
   
   // MARK: Delete and Add
-  func deleteGist(gistId: String, completionHandler: (ErrorType?) -> Void) {
+  func deleteGist(gistId: String, completionHandler: (NSError?) -> Void) {
     // DELETE /gists/:id
     let urlString = "https://api.github.com/gists/\(gistId)"
     alamofireManager.request(.DELETE, urlString)
-      .isUnauthorized { _, _, result in
-        if let unauthorized = result.value where unauthorized == true {
+      .isUnauthorized { response in
+        if let unauthorized = response.result.value where unauthorized == true {
           let lostOAuthError = self.handleUnauthorizedResponse(urlString)
           completionHandler(lostOAuthError)
           return // don't bother with .responseArray, we didn't get any data
@@ -465,8 +465,8 @@ class GitHubAPIManager {
     
     let urlString = "https://api.github.com/gists"
     alamofireManager.request(.POST, urlString, parameters: parameters, encoding: .JSON)
-      .isUnauthorized { _, _, result in
-        if let unauthorized = result.value where unauthorized == true {
+      .isUnauthorized { response in
+        if let unauthorized = response.result.value where unauthorized == true {
           let lostOAuthError = self.handleUnauthorizedResponse(urlString)
           completionHandler(nil, lostOAuthError)
           return // don't bother with .responseArray, we didn't get any data

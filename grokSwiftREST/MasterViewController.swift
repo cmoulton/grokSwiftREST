@@ -86,7 +86,7 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   }
   
   func loadGists(urlToLoad: String?) {
-    let completionHandler: (Result<[Gist]>, String?) -> Void = { (result, nextPage) in
+    let completionHandler: (Result<[Gist], NSError>, String?) -> Void = { (result, nextPage) in
       self.isLoading = false
       self.nextPageURLString = nextPage
       
@@ -100,7 +100,7 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
         self.nextPageURLString = nil
         
         self.isLoading = false
-        if let error = result.error as? NSError {
+        if let error = result.error {
           if error.domain == NSURLErrorDomain {
             if error.code == NSURLErrorUserAuthenticationRequired {
               self.showOAuthLoginView()

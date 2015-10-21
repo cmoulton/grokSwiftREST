@@ -34,7 +34,7 @@ class GitHubAPIManager {
     set {
       if let valueToSave = newValue {
         do {
-          try Locksmith.saveData(["token": valueToSave], forUserAccount: "github")
+          try Locksmith.updateData(["token": valueToSave], forUserAccount: "github")
         } catch {
           let _ = try? Locksmith.deleteDataForUserAccount("github")
         }

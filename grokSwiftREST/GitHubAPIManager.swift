@@ -17,8 +17,8 @@ class GitHubAPIManager {
   
   static let ErrorDomain = "com.error.GitHubAPIManager"
   
-  var clientID: String = "1234567890"
-  var clientSecret: String = "abcdefghijkl"
+  let clientID: String = "1234567890"
+  let clientSecret: String = "abcdefghijkl"
   
   func clearCache() {
     let cache = NSURLCache.sharedURLCache()
@@ -29,6 +29,11 @@ class GitHubAPIManager {
   // stored as vars since sometimes it requires a round trip to safari which
   // makes it hard to just keep a reference to it
   var OAuthTokenCompletionHandler:(NSError? -> Void)?
+  
+  init () {
+    let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+    alamofireManager = Alamofire.Manager(configuration: configuration)
+  }
   
   var OAuthToken: String? {
     set {
@@ -52,11 +57,6 @@ class GitHubAPIManager {
       }
       return nil
     }
-  }
-  
-  init () {
-    let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-    alamofireManager = Alamofire.Manager(configuration: configuration)
   }
   
   // MARK: - Basic Auth

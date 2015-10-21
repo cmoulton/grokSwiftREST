@@ -49,7 +49,7 @@ extension Alamofire.Request {
         return .Failure(error!)
       }
       guard let responseData = data else {
-        let failureReason = "Object could not be serialized because input data was nil."
+        let failureReason = "Array could not be serialized because input data was nil."
         let error = Error.errorWithCode(.DataSerializationFailed, failureReason: failureReason)
         return .Failure(error)
       }

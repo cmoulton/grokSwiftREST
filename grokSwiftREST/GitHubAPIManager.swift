@@ -10,12 +10,10 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 import Locksmith
-import Reachability
 
 class GitHubAPIManager {
   static let sharedInstance = GitHubAPIManager()
   var alamofireManager:Alamofire.Manager
-  var reach: Reachability?
   
   static let ErrorDomain = "com.error.GitHubAPIManager"
   
@@ -88,7 +86,7 @@ class GitHubAPIManager {
   }
   
   // MARK: - OAuth flow
-  func startOAuth2Login() {
+  func URLToStartOAuth2Login() -> NSURL? {
     let defaults = NSUserDefaults.standardUserDefaults()
     defaults.setBool(true, forKey: "loadingOAuthToken")
     
@@ -99,25 +97,10 @@ class GitHubAPIManager {
         let error = NSError(domain: GitHubAPIManager.ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not create an OAuth authorization URL", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
         completionHandler(error)
       }
-      return
+      return nil
     }
     
-    guard Reachability.reachabilityForInternetConnection().isReachable() == true else {
-      if let completionHandler = self.OAuthTokenCompletionHandler {
-        let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: [NSLocalizedDescriptionKey: "No internet connection", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
-        completionHandler(error)
-      }
-      return
-    }
-    
-    let success = UIApplication.sharedApplication().openURL(authURL)
-    if (!success) {
-      defaults.setBool(false, forKey: "loadingOAuthToken")
-      if let completionHandler = self.OAuthTokenCompletionHandler {
-        let error = NSError(domain: GitHubAPIManager.ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not create an OAuth authorization URL", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
-        completionHandler(error)
-      }
-    }
+    return authURL
   }
   
   func processOAuthStep1Response(url: NSURL) {

@@ -10,15 +10,16 @@ import UIKit
 import Alamofire
 import PINRemoteImage
 import BRYXBanner
+import SafariServices
 
-class MasterViewController: UITableViewController, LoginViewDelegate {
+class MasterViewController: UITableViewController, LoginViewDelegate, SFSafariViewControllerDelegate {
   var dateFormatter = NSDateFormatter()
   var detailViewController: DetailViewController? = nil
   var gists = [Gist]()
   var nextPageURLString: String?
   var isLoading = false
   var notConnectedBanner: Banner?
-  
+  var safariViewController: SFSafariViewController?
   
   @IBOutlet weak var gistSegmentedControl: UISegmentedControl!
   
@@ -67,6 +68,7 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
   func loadInitialData() {
     isLoading = true
     GitHubAPIManager.sharedInstance.OAuthTokenCompletionHandler = { (error) -> Void in
+      self.safariViewController?.dismissViewControllerAnimated(true, completion: nil)
       if let receivedError = error {
         print(receivedError)
         self.isLoading = false
@@ -79,7 +81,7 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
     }
     
     if (!GitHubAPIManager.sharedInstance.hasOAuthToken()) {
-      GitHubAPIManager.sharedInstance.startOAuth2Login()
+      self.showOAuthLoginView()
     } else {
       loadGists(nil)
     }
@@ -278,6 +280,20 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
     }
   }
   
+  // MARK: - Safari View Controller Delegate
+  func safariViewController(controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
+    // Detect not being able to load the OAuth URL
+    if (!didLoadSuccessfully) {
+      let defaults = NSUserDefaults.standardUserDefaults()
+      defaults.setBool(false, forKey: "loadingOAuthToken")
+      if let completionHandler = GitHubAPIManager.sharedInstance.OAuthTokenCompletionHandler {
+        let error = NSError(domain: GitHubAPIManager.ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not create an OAuth authorization URL", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
+        completionHandler(error)
+      }
+      controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+  }
+  
   // MARK: - Pull to Refresh
   func refresh(sender:AnyObject) {
     let defaults = NSUserDefaults.standardUserDefaults()
@@ -293,7 +309,14 @@ class MasterViewController: UITableViewController, LoginViewDelegate {
     defaults.setBool(true, forKey: "loadingOAuthToken")
     
     self.dismissViewControllerAnimated(false, completion: nil)
-    GitHubAPIManager.sharedInstance.startOAuth2Login()
+    
+    if let authURL = GitHubAPIManager.sharedInstance.URLToStartOAuth2Login() {
+      safariViewController = SFSafariViewController(URL: authURL)
+      safariViewController?.delegate = self
+      if let webViewController = safariViewController {
+        self.presentViewController(webViewController, animated: true, completion: nil)
+      }
+    }
   }
   
   // MARK: - Segmented Control

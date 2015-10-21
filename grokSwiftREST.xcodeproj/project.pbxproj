@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C486DBD6014F8BA62BDB93A7 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D69B16AB3D445DF4545C9C5 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		C486DBD6014F8BA62BDB93A7 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D69B16AB3D445DF4545C9C5 /* Pods.framework */; };
 		CF30475B1BD6D5780006CC45 /* GistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF30475A1BD6D5780006CC45 /* GistRouter.swift */; settings = {ASSET_TAGS = (); }; };
+		CFAED14F1BD6FC620068C6ED /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFAED14E1BD6FC620068C6ED /* SafariServices.framework */; };
 		CFE6B6A51BA34776002A9C08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */; };
 		CFE6B6A71BA34776002A9C08 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */; };
 		CFE6B6A91BA34776002A9C08 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFE6B6A81BA34776002A9C08 /* DetailViewController.swift */; };
@@ -50,6 +51,7 @@
 		575242F5DE3A241119C96727 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		8F1EEA2724E7063262E9981E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		CF30475A1BD6D5780006CC45 /* GistRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GistRouter.swift; sourceTree = "<group>"; };
+		CFAED14E1BD6FC620068C6ED /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		CFE6B6A11BA34776002A9C08 /* grokSwiftREST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = grokSwiftREST.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFE6B6A41BA34776002A9C08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFE6B6A61BA34776002A9C08 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFAED14F1BD6FC620068C6ED /* SafariServices.framework in Frameworks */,
 				C486DBD6014F8BA62BDB93A7 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,6 +107,7 @@
 		68D3EAAE01F4332D0DFB58FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CFAED14E1BD6FC620068C6ED /* SafariServices.framework */,
 				1D69B16AB3D445DF4545C9C5 /* Pods.framework */,
 			);
 			name = Frameworks;

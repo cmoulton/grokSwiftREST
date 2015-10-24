@@ -60,9 +60,9 @@ class CreateGistViewController: XLFormViewController {
   }
   
   func savePressed(button: UIBarButtonItem) {
-    let validationErrors : Array<NSError> = self.formValidationErrors() as! Array<NSError>
-    guard (validationErrors.count == 0) else {
-      self.showFormValidationError(validationErrors.first)
+    let validationErrors = self.formValidationErrors() as? [NSError]
+    if validationErrors?.count > 0 {
+      self.showFormValidationError(validationErrors!.first)
       return
     }
     self.tableView.endEditing(true)
@@ -80,9 +80,9 @@ class CreateGistViewController: XLFormViewController {
           files.append(file)
         }
         GitHubAPIManager.sharedInstance.createNewGist(description, isPublic: isPublic, files: files, completionHandler: {
-          (success, error) in
-          guard error == nil, let successValue = success where successValue == true else {
-            if let error = error {
+          result in
+          guard result.error == nil, let successValue = result.value where successValue == true else {
+            if let error = result.error {
               print(error)
             }
             let alertController = UIAlertController(title: "Could not create gist", message: "Sorry, your gist couldn't be deleted. Maybe GitHub is down or you don't have an internet connection.", preferredStyle: .Alert)

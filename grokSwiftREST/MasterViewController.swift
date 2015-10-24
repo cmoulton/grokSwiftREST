@@ -316,6 +316,12 @@ class MasterViewController: UITableViewController, LoginViewDelegate, SFSafariVi
       if let webViewController = safariViewController {
         self.presentViewController(webViewController, animated: true, completion: nil)
       }
+    } else {
+      defaults.setBool(false, forKey: "loadingOAuthToken")
+      if let completionHandler = GitHubAPIManager.sharedInstance.OAuthTokenCompletionHandler {
+        let error = NSError(domain: GitHubAPIManager.ErrorDomain, code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not create an OAuth authorization URL", NSLocalizedRecoverySuggestionErrorKey: "Please retry your request"])
+        completionHandler(error)
+      }
     }
   }
   

@@ -202,11 +202,12 @@ class MasterViewController: UITableViewController, LoginViewDelegate, SFSafariVi
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "showDetail" {
       if let indexPath = self.tableView.indexPathForSelectedRow {
-        let object = gists[indexPath.row] as Gist
-        let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-        controller.gist = object
-        controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-        controller.navigationItem.leftItemsSupplementBackButton = true
+        let gist = gists[indexPath.row] as Gist
+        if let detailViewController = (segue.destinationViewController as! UINavigationController).topViewController as? DetailViewController {
+          detailViewController.gist = gist
+          detailViewController.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+          detailViewController.navigationItem.leftItemsSupplementBackButton = true
+        }
       }
     }
   }

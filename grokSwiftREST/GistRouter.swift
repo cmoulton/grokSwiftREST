@@ -80,10 +80,10 @@ enum GistRouter: URLRequestConvertible {
     }
 
     let encoding = Alamofire.ParameterEncoding.JSON
-    let (encoded, _) = encoding.encode(URLRequest, parameters: result.parameters)
+    let (encodedRequest, _) = encoding.encode(URLRequest, parameters: result.parameters)
     
-    encoded.HTTPMethod = method.rawValue
+    encodedRequest.HTTPMethod = method.rawValue
     
-    return encoded
+    return encodedRequest
   }
 }

@@ -58,7 +58,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>grokGitHub</string>
+				<string>grokGitHubOAuth</string>
 			</array>
 			<key>CFBundleURLName</key>
 			<string>com.teakmobile.grokswift.grokSwiftREST</string>

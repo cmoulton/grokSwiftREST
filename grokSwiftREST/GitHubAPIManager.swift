@@ -61,15 +61,19 @@ class GitHubAPIManager {
   
   // MARK: - Basic Auth
   func printMyStarredGistsWithBasicAuth() -> Void {
+    Alamofire.request(GistRouter.GetPublic())
+      .responseString { response in
+        if let receivedString = response.result.value {
+          print(receivedString)
+        }
+    }
+  }
+  
+  func doGetWithBasicAuth() -> Void {
     let username = "myUsername"
     let password = "myPassword"
-    
-    let credentialData = "\(username):\(password)".dataUsingEncoding(NSUTF8StringEncoding)!
-    let base64Credentials = credentialData.base64EncodedStringWithOptions([])
-    
-    let headers = ["Authorization": "Basic \(base64Credentials)"]
-    
-    Alamofire.request(.GET, "https://api.github.com/gists/starred", headers: headers)
+    Alamofire.request(.GET, "https://httpbin.org/basic-auth/\(username)/\(password)")
+      .authenticate(user: username, password: password)
       .responseString { response in
         if let receivedString = response.result.value {
           print(receivedString)
@@ -209,8 +213,8 @@ class GitHubAPIManager {
     return lostOAuthError
   }
   
-  func getGists(urlString: String, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
-    alamofireManager.request(GistRouter.GetAtPath(urlString))
+  func getGists(urlRequest: URLRequestConvertible, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
+    alamofireManager.request(urlRequest)
       .validate()
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
@@ -236,31 +240,30 @@ class GitHubAPIManager {
   
   func getPublicGists(pageToLoad: String?, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
     if let urlString = pageToLoad {
-      getGists(urlString, completionHandler: completionHandler)
+      getGists(GistRouter.GetAtPath(urlString), completionHandler: completionHandler)
     } else {
-      getGists("https://api.github.com/gists/public", completionHandler: completionHandler)
+      getGists(GistRouter.GetPublic(), completionHandler: completionHandler)
     }
   }
   
   func getMyStarredGists(pageToLoad: String?, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
     if let urlString = pageToLoad {
-      getGists(urlString, completionHandler: completionHandler)
+      getGists(GistRouter.GetAtPath(urlString), completionHandler: completionHandler)
     } else {
-      getGists("https://api.github.com/gists/starred", completionHandler: completionHandler)
+      getGists(GistRouter.GetMyStarred(), completionHandler: completionHandler)
     }
   }
   
   func getMyGists(pageToLoad: String?, completionHandler: (Result<[Gist], NSError>, String?) -> Void) {
     if let urlString = pageToLoad {
-      getGists(urlString, completionHandler: completionHandler)
+      getGists(GistRouter.GetAtPath(urlString), completionHandler: completionHandler)
     } else {
-      getGists("https://api.github.com/gists", completionHandler: completionHandler)
+      getGists(GistRouter.GetMine(), completionHandler: completionHandler)
     }
   }
   
   // MARK: - Images
   func imageFromURLString(imageURLString: String, completionHandler: (UIImage?, NSError?) -> Void) {
-    // TODO: test for need of headers?
     alamofireManager.request(.GET, imageURLString)
       .response { (request, response, data, error) in
         // use the generic response serializer that returns NSData

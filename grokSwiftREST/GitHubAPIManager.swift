@@ -307,7 +307,6 @@ class GitHubAPIManager {
   
   // MARK: Starring / Unstarring / Star status
   func isGistStarred(gistId: String, completionHandler: Result<Bool, NSError> -> Void) {
-    // GET /gists/:id/star
     alamofireManager.request(GistRouter.IsStarred(gistId))
       .validate(statusCode: [204])
       .isUnauthorized { response in
@@ -333,7 +332,6 @@ class GitHubAPIManager {
   }
   
   func starGist(gistId: String, completionHandler: (NSError?) -> Void) {
-    //  PUT /gists/:id/star
     alamofireManager.request(GistRouter.Star(gistId))
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
@@ -352,7 +350,6 @@ class GitHubAPIManager {
   }
   
   func unstarGist(gistId: String, completionHandler: (NSError?) -> Void) {
-    //  PUT /gists/:id/star
     alamofireManager.request(GistRouter.Unstar(gistId))
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
@@ -373,7 +370,6 @@ class GitHubAPIManager {
   
   // MARK: Delete and Add
   func deleteGist(gistId: String, completionHandler: (NSError?) -> Void) {
-    // DELETE /gists/:id
     alamofireManager.request(GistRouter.Delete(gistId))
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
@@ -383,15 +379,15 @@ class GitHubAPIManager {
         }
       }
       .response { (request, response, data, error) in
-        if let anError = error {
-          print(anError)
+        if let error = error {
+          print(error)
           return
         }
         completionHandler(error)
     }
   }
   
-  func createNewGist(description: String, isPublic: Bool, files: [File], completionHandler: (Bool?, NSError?) -> Void) {
+  func createNewGist(description: String, isPublic: Bool, files: [File], completionHandler: Result<Bool, NSError> -> Void) {
     let publicString: String
     if isPublic {
       publicString = "true"
@@ -420,8 +416,8 @@ class GitHubAPIManager {
         }
       }
       .response { (request, response, data, error) in
-        if let anError = error {
-          print(anError)
+        if let error = error {
+          print(error)
           completionHandler(false, nil)
           return
         }

@@ -38,7 +38,13 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         result in
         if let error = result.error {
           print(error)
-          if error.domain == NSURLErrorDomain && error.code == NSURLErrorNotConnectedToInternet {
+          if error.domain == NSURLErrorDomain && error.code == NSURLErrorUserAuthenticationRequired {
+            let alertController = UIAlertController(title: "Could not star gist", message: error.description, preferredStyle: .Alert)
+            // add ok button
+            let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+            alertController.addAction(okAction)
+            self.presentViewController(alertController, animated:true, completion: nil)
+          } else if error.domain == NSURLErrorDomain && error.code == NSURLErrorNotConnectedToInternet {
             // show not connected error & tell em to try again when they do have a connection
             // check for existing banner
             if let existingBanner = self.notConnectedBanner {
@@ -158,12 +164,18 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     if let gistId = gist?.id {
       GitHubAPIManager.sharedInstance.starGist(gistId, completionHandler: {
         (error) in
-        if let anError = error {
-          print(anError)
-          let alertController = UIAlertController(title: "Could not star gist", message: "Sorry, your gist couldn't be starred. Maybe GitHub is down or you don't have an internet connection.", preferredStyle: .Alert)
+        if let error = error {
+          print(error)
+          let alertController:UIAlertController
+          if error.domain == NSURLErrorDomain && error.code == NSURLErrorUserAuthenticationRequired {
+            alertController = UIAlertController(title: "Could not star gist", message: error.description, preferredStyle: .Alert)
+          } else {
+            alertController = UIAlertController(title: "Could not star gist", message: "Sorry, your gist couldn't be starred. Maybe GitHub is down or you don't have an internet connection.", preferredStyle: .Alert)
+          }
           // add ok button
           let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
           alertController.addAction(okAction)
+          self.presentViewController(alertController, animated:true, completion: nil)
         } else {
           self.isStarred = true
           self.tableView.reloadRowsAtIndexPaths(
@@ -178,12 +190,18 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     if let gistId = gist?.id {
       GitHubAPIManager.sharedInstance.unstarGist(gistId, completionHandler: {
         (error) in
-        if let anError = error {
-          print(anError)
-          let alertController = UIAlertController(title: "Could not unstar gist", message: "Sorry, your gist couldn't be unstarred. Maybe GitHub is down or you don't have an internet connection.", preferredStyle: .Alert)
+        if let error = error {
+          print(error)
+          let alertController:UIAlertController
+          if error.domain == NSURLErrorDomain && error.code == NSURLErrorUserAuthenticationRequired {
+            alertController = UIAlertController(title: "Could not star gist", message: error.description, preferredStyle: .Alert)
+          } else {
+            alertController = UIAlertController(title: "Could not star gist", message: "Sorry, your gist couldn't be starred. Maybe GitHub is down or you don't have an internet connection.", preferredStyle: .Alert)
+          }
           // add ok button
           let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
           alertController.addAction(okAction)
+          self.presentViewController(alertController, animated:true, completion: nil)
         } else {
           self.isStarred = false
           self.tableView.reloadRowsAtIndexPaths(

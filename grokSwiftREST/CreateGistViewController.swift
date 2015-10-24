@@ -82,8 +82,8 @@ class CreateGistViewController: XLFormViewController {
         GitHubAPIManager.sharedInstance.createNewGist(description, isPublic: isPublic, files: files, completionHandler: {
           (success, error) in
           guard error == nil, let successValue = success where successValue == true else {
-            if let anError = error {
-              print(anError)
+            if let error = error {
+              print(error)
             }
             let alertController = UIAlertController(title: "Could not create gist", message: "Sorry, your gist couldn't be deleted. Maybe GitHub is down or you don't have an internet connection.", preferredStyle: .Alert)
             // add ok button

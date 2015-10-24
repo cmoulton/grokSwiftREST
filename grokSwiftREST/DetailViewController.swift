@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import WebKit
+import SafariServices
 import BRYXBanner
 
 class DetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -147,16 +147,9 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
       }
     } else if indexPath.section == 1 {
       if let file = gist?.files?[indexPath.row], urlString = file.raw_url, url = NSURL(string: urlString) {
-        let webView = WKWebView()
-        
-        let webViewWrapperVC = UIViewController()
-        webViewWrapperVC.view = webView
-        webViewWrapperVC.title = file.filename
-        
-        let request = NSURLRequest(URL: url)
-        webView.loadRequest(request)
-        
-        self.navigationController?.pushViewController(webViewWrapperVC, animated: true)
+        let safariViewController = SFSafariViewController(URL: url)
+        safariViewController.title = file.filename
+        self.navigationController?.pushViewController(safariViewController, animated: true)
       }
     }
   }

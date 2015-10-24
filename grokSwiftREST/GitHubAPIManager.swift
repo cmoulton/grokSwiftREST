@@ -411,18 +411,18 @@ class GitHubAPIManager {
       .isUnauthorized { response in
         if let unauthorized = response.result.value where unauthorized == true {
           let lostOAuthError = self.handleUnauthorizedResponse()
-          completionHandler(nil, lostOAuthError)
+          completionHandler(.Failure(lostOAuthError))
           return // don't bother with .responseArray, we didn't get any data
         }
       }
       .response { (request, response, data, error) in
         if let error = error {
           print(error)
-          completionHandler(false, nil)
+          completionHandler(.Success(false))
           return
         }
         self.clearCache()
-        completionHandler(true, nil)
+        completionHandler(.Success(true))
     }
   }
 }

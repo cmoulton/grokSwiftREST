@@ -15,7 +15,7 @@ After reading this book you'll be able to:
 - Let users of your app add, modify and delete objects (as long as your web service supports it).
 - Hook in to more web service calls to extend you app, like adding user profiles or letting users submit comments or attach photos to objects.
 
-To achieve those goals we'll build out an app based on the GitHub API, focusing on gists. *(If you're not familiar with gists, they're basically just text snippets, often code owned by a user on GitHub.)* Your model objects might be bus routes, customers, chat messages, or whatever kind of object is core to your app. So our demo app will:
+To achieve those goals we'll build out an app based on the GitHub API, focusing on gists. *(If you're not familiar with gists, they're basically just text snippets, often code owned by a user on GitHub.)* Your model objects might be bus routes, customers, chat messages, or whatever kind of object is core to your app.
 
 We'll start by figuring out how to make API calls in Swift then we'll start building out our app one feature at a time:
 

@@ -1,3 +1,5 @@
+*This repo contains demo code from an older version of [iOS Apps with REST APIs: Building Web-Driven Apps in Swift](https://leanpub.com/iosappswithrest) which uses Swift 2.0 and Alamofire 2. Updated code using Swift 2.0 and Alamofire 3 is available at https://github.com/cmoulton/grokSwiftREST_v1.1/*
+
 # Demo Code for [iOS Apps with REST APIs: Building Web-Driven Apps in Swift](https://leanpub.com/iosappswithrest)
 
 You need to build an iOS app around your team's API or integrate a third party API. You need a quick, clear guide to demystify Xcode and Swift. No esoteric details about Core Anything or mathematical proofs of KVO's features. Only the nitty gritty that you need to get real work done now: pulling data from your web services into an iOS app without tossing your MacBook or Mac Mini through a window.
@@ -70,7 +72,7 @@ In this book we're going to deal with web services that return JSON. JSON hugely
 
 ## Versions
 
-This book was written using Swift 2.0, iOS 9 and Xcode 7 GM. It should work fine in Xcode 7 when it's released and it'll be updated if it doesn't.
+This book was written using Swift 2.0, iOS 9 and Xcode 7.
 
 The most common libraries we'll use are Alamofire v2.0.0 and SwiftyJSON v2.2.0. Where we use other libraries we'll explicitly list the version used.
 
